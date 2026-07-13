@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { CheckCircle2, ShieldCheck } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useTranslations, useLocale } from 'next-intl'
+import { ShieldCheck } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
@@ -33,12 +34,13 @@ const EMPTY_ADDRESS: Address = {
 export default function CheckoutPage() {
   const t = useTranslations('checkout')
   const tCart = useTranslations('cart')
+  const locale = useLocale()
+  const router = useRouter()
   const { items, subtotal, clear, isAuthenticated } = useCart()
 
   const [step, setStep] = useState<Step>('shipping')
   const [address, setAddress] = useState<Address>(EMPTY_ADDRESS)
   const [email, setEmail] = useState('')
-  const [order, setOrder] = useState<Order | null>(null)
   const [isPlacing, setIsPlacing] = useState(false)
   const [placeError, setPlaceError] = useState<string | null>(null)
 
@@ -49,23 +51,6 @@ export default function CheckoutPage() {
           <p className="body">{t('loginRequired')}</p>
           <Button render={<Link href="/login" />} className="mt-4">
             {t('goToLogin')}
-          </Button>
-        </Container>
-      </Section>
-    )
-  }
-
-  if (order) {
-    return (
-      <Section as="div" spacing="none" className="section-y">
-        <Container className="mx-auto max-w-lg text-center">
-          <CheckCircle2 className="mx-auto mb-4 size-14 text-primary" />
-          <h1 className="heading-2">{t('confirmation.heading')}</h1>
-          <p className="body mt-2">{t('confirmation.body')}</p>
-          <p className="mt-6 text-sm text-muted-foreground">{t('confirmation.orderNumber')}</p>
-          <p className="text-2xl font-bold tracking-wide text-foreground">{order.invoice_number ?? order.ulid}</p>
-          <Button render={<Link href="/orders/lookup" />} size="lg" className="mt-8">
-            {t('confirmation.trackOrder')}
           </Button>
         </Container>
       </Section>
@@ -121,7 +106,7 @@ export default function CheckoutPage() {
       }
 
       await clear()
-      setOrder(orderResult.data)
+      router.push(`/${locale}/funnel/${orderResult.data.ulid}`)
     } finally {
       setIsPlacing(false)
     }

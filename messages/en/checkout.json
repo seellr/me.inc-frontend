@@ -37,5 +37,19 @@
     "orderNumber": "Order number",
     "trackOrder": "Track your order"
   },
+  "funnel": {
+    "oto": {
+      "defaultHeadline": "Special one-time offer"
+    },
+    "downsell": {
+      "defaultHeadline": "Wait — here's a better fit"
+    },
+    "complete": {
+      "heading": "You're all set!",
+      "trackOrder": "Track your order"
+    },
+    "accept": "Yes, add it",
+    "decline": "No thanks"
+  },
   "back": "Back"
 }

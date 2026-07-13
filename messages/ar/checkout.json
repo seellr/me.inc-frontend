@@ -37,5 +37,19 @@
     "orderNumber": "رقم الطلب",
     "trackOrder": "تتبع طلبك"
   },
+  "funnel": {
+    "oto": {
+      "defaultHeadline": "عرض خاص لمرة واحدة"
+    },
+    "downsell": {
+      "defaultHeadline": "انتظر — إليك خيار أنسب"
+    },
+    "complete": {
+      "heading": "تم كل شيء!",
+      "trackOrder": "تتبع طلبك"
+    },
+    "accept": "نعم، أضفه",
+    "decline": "لا شكرًا"
+  },
   "back": "رجوع"
 }
