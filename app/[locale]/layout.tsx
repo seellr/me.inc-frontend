@@ -8,6 +8,7 @@ import '../globals.css'
 import { cn } from '@/lib/utils'
 import { chillax, thmanyah } from '@/lib/fonts'
 import { routing } from '@/i18n/routing'
+import { TooltipProvider } from '@/components/ui/tooltip'
 
 const DIRECTION: Record<string, 'rtl' | 'ltr'> = { ar: 'rtl', en: 'ltr' }
 
@@ -42,7 +43,7 @@ export default async function LocaleLayout({
       <body className="min-h-full flex flex-col">
         <DirectionProvider direction={DIRECTION[locale]}>
           <NextIntlClientProvider messages={messages}>
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
           </NextIntlClientProvider>
         </DirectionProvider>
       </body>
