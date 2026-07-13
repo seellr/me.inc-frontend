@@ -3,7 +3,10 @@ import { getTranslations } from 'next-intl/server'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { ProductsListing } from '@/components/commerce/ProductsListing'
-import { getStoreProducts, STORE_CATEGORIES } from '@/lib/store-data'
+import { STORE_CATEGORIES } from '@/lib/store-data'
+import { storeFetchServer } from '@/lib/store/api-server'
+import { productToStoreProduct } from '@/lib/store/adapters'
+import type { Product } from '@/types/dto/product.dto'
 
 export const revalidate = 3600
 
@@ -15,7 +18,8 @@ export default async function ProductsPage({
   const { locale } = await params
   setRequestLocale(locale)
 
-  const [products, t] = await Promise.all([getStoreProducts(3600), getTranslations('products')])
+  const [result, t] = await Promise.all([storeFetchServer<Product[]>('/products', 3600), getTranslations('products')])
+  const products = (result.ok ? result.data : []).map(productToStoreProduct)
 
   return (
     <Section as="div" spacing="none" className="section-y">

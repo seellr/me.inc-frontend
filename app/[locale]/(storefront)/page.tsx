@@ -9,8 +9,11 @@ import { CategoriesSection } from "@/components/home/CategoriesSection";
 import { LatestProductsSection } from "@/components/home/LatestProductsSection";
 import { FeaturedProductSection } from "@/components/home/FeaturedProductSection";
 import { AnimatedLine } from "@/components/ui/AnimatedLine";
-import { STORE_CATEGORIES, getStoreProducts } from "@/lib/store-data";
+import { STORE_CATEGORIES } from "@/lib/store-data";
+import { storeFetchServer } from "@/lib/store/api-server";
+import { productToStoreProduct } from "@/lib/store/adapters";
 import { setRequestLocale } from "next-intl/server";
+import type { Product } from "@/types/dto/product.dto";
 
 export const revalidate = 3600;
 
@@ -22,7 +25,8 @@ export default async function Home({
   const { locale } = await params
   setRequestLocale(locale)
 
-  const products = await getStoreProducts(3600)
+  const result = await storeFetchServer<Product[]>('/products', 3600)
+  const products = (result.ok ? result.data : []).map(productToStoreProduct)
   const featuredProduct = products.find((p) => p.featured) ?? products[0]
   const latestProducts = products.filter((p) => p.slug !== featuredProduct?.slug).slice(0, 8)
 
