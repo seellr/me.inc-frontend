@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { AdminLoginRequestSchema, AdminLoginResponseSchema } from '@/types/dto/auth.dto'
 import { setAdminTokenCookie } from '@/lib/admin/auth'
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
-const API_KEY = process.env.API_KEY ?? ''
+import { BACKEND_API_URL, backendHeaders } from '@/lib/admin/backend-client'
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null)
@@ -15,9 +13,11 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const res = await fetch(`${API_URL}/admin/auth/login`, {
+  const locale = request.headers.get('x-locale') ?? 'en'
+
+  const res = await fetch(`${BACKEND_API_URL}/admin/auth/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'x-api-key': API_KEY },
+    headers: backendHeaders(locale),
     body: JSON.stringify(parsed.data),
   })
   const json = await res.json().catch(() => ({}))

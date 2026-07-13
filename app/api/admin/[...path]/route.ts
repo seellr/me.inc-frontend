@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getLocale } from 'next-intl/server'
 import { getAdminTokenCookie } from '@/lib/admin/auth'
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
-const API_KEY = process.env.API_KEY ?? ''
+import { BACKEND_API_URL, backendHeaders } from '@/lib/admin/backend-client'
 
 async function forward(request: NextRequest, path: string[]): Promise<NextResponse> {
   const token = await getAdminTokenCookie()
@@ -12,21 +9,18 @@ async function forward(request: NextRequest, path: string[]): Promise<NextRespon
     return NextResponse.json({ success: false, message: 'Unauthenticated', error_code: 'unauthenticated' }, { status: 401 })
   }
 
-  const locale = await getLocale()
+  // See lib/admin/api-client.ts: this route lives outside app/[locale]/*,
+  // so next-intl's getLocale() has no route-segment signal here — the
+  // client sends the real locale explicitly instead.
+  const locale = request.headers.get('x-locale') ?? 'en'
   const search = request.nextUrl.search
-  const targetUrl = `${API_URL}/admin/${path.join('/')}${search}`
+  const targetUrl = `${BACKEND_API_URL}/admin/${path.join('/')}${search}`
 
   const body = request.method === 'GET' || request.method === 'DELETE' ? undefined : await request.text()
 
   const res = await fetch(targetUrl, {
     method: request.method,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'x-api-key': API_KEY,
-      'Accept-Language': locale,
-      Authorization: `Bearer ${token}`,
-    },
+    headers: backendHeaders(locale, token),
     body,
   })
 

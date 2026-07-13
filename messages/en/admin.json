@@ -5,10 +5,15 @@
     "logout": "Log out"
   },
   "login": {
-    "title": "Admin Login",
+    "title": "Welcome back",
     "email": "Email",
     "password": "Password",
     "submit": "Log in",
-    "error": "Invalid credentials"
+    "error": "Invalid credentials",
+    "termsPrefix": "By signing in, you agree to our",
+    "terms": "Terms",
+    "and": "&",
+    "privacy": "Privacy Policy",
+    "heroText": "Manage every brand, product, and order from one place."
   }
 }

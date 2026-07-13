@@ -1,6 +1,7 @@
 import 'server-only'
 import { getLocale } from 'next-intl/server'
 import { getAdminTokenCookie } from '@/lib/admin/auth'
+import { BACKEND_API_URL, backendHeaders } from '@/lib/admin/backend-client'
 
 export interface ApiMeta {
   per_page: number
@@ -24,21 +25,14 @@ export interface ApiFailure {
 
 export type ApiResult<T> = ApiSuccess<T> | ApiFailure
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
-const API_KEY = process.env.API_KEY ?? ''
-
 export async function adminFetchServer<T>(path: string, init?: RequestInit): Promise<ApiResult<T>> {
   const token = await getAdminTokenCookie()
   const locale = await getLocale()
 
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await fetch(`${BACKEND_API_URL}${path}`, {
     ...init,
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'x-api-key': API_KEY,
-      'Accept-Language': locale,
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...backendHeaders(locale, token),
       ...(init?.headers as Record<string, string> | undefined),
     },
     cache: 'no-store',

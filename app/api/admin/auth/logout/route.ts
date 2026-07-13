@@ -1,16 +1,15 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getAdminTokenCookie, clearAdminTokenCookie } from '@/lib/admin/auth'
+import { BACKEND_API_URL, backendHeaders } from '@/lib/admin/backend-client'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
-const API_KEY = process.env.API_KEY ?? ''
-
-export async function POST() {
+export async function POST(request: NextRequest) {
   const token = await getAdminTokenCookie()
+  const locale = request.headers.get('x-locale') ?? 'en'
 
   if (token) {
-    await fetch(`${API_URL}/admin/auth/logout`, {
+    await fetch(`${BACKEND_API_URL}/admin/auth/logout`, {
       method: 'POST',
-      headers: { Accept: 'application/json', 'x-api-key': API_KEY, Authorization: `Bearer ${token}` },
+      headers: backendHeaders(locale, token),
     }).catch(() => {})
   }
 
