@@ -129,5 +129,22 @@
     "superAdmin": "Super admin",
     "status": "Status",
     "active": "Active"
+  },
+  "funnel": {
+    "title": "Funnel",
+    "tripwire": "Tripwire",
+    "bump": "Order bump",
+    "oto": "One-time offer (OTO)",
+    "downsell": "Downsell",
+    "premiumBridge": "Premium bridge",
+    "productUlid": "Product ULID",
+    "price": "Price",
+    "originalPrice": "Original price",
+    "timerMinutes": "Timer (minutes)",
+    "scoreThreshold": "CRM score threshold",
+    "headline": "Headline (Arabic)",
+    "save": "Save funnel",
+    "saveSuccess": "Funnel config saved",
+    "saveError": "Could not save funnel config"
   }
 }

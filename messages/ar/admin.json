@@ -129,5 +129,22 @@
     "superAdmin": "مدير عام",
     "status": "الحالة",
     "active": "مفعّل"
+  },
+  "funnel": {
+    "title": "قمع المبيعات",
+    "tripwire": "عرض الدخول",
+    "bump": "إضافة عند الدفع",
+    "oto": "عرض لمرة واحدة",
+    "downsell": "عرض بديل أقل سعرًا",
+    "premiumBridge": "الجسر المميز",
+    "productUlid": "معرّف المنتج",
+    "price": "السعر",
+    "originalPrice": "السعر الأصلي",
+    "timerMinutes": "المؤقت (دقائق)",
+    "scoreThreshold": "الحد الأدنى لنقاط العميل",
+    "headline": "العنوان (عربي)",
+    "save": "حفظ القمع",
+    "saveSuccess": "تم حفظ إعدادات القمع",
+    "saveError": "تعذر حفظ إعدادات القمع"
   }
 }
