@@ -1,0 +1,38 @@
+{
+  "title": "Checkout",
+  "steps": {
+    "shipping": "Shipping",
+    "payment": "Payment",
+    "review": "Review"
+  },
+  "shipping": {
+    "heading": "Shipping address",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "address": "Address",
+    "addressLine2": "Apartment, suite, etc. (optional)",
+    "city": "City",
+    "country": "Country",
+    "postalCode": "Postal code",
+    "continue": "Continue to payment"
+  },
+  "payment": {
+    "heading": "Payment",
+    "cardNumber": "Card number",
+    "expiry": "Expiry",
+    "cvc": "CVC",
+    "securityNote": "Your payment is encrypted and processed securely.",
+    "continue": "Review order"
+  },
+  "review": {
+    "heading": "Review your order",
+    "placeOrder": "Place order"
+  },
+  "confirmation": {
+    "heading": "Order confirmed",
+    "body": "We've received your order and will start processing it right away.",
+    "orderNumber": "Order number",
+    "trackOrder": "Track your order"
+  },
+  "back": "Back"
+}

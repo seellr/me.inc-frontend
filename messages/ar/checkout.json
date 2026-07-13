@@ -1,0 +1,38 @@
+{
+  "title": "إتمام الشراء",
+  "steps": {
+    "shipping": "الشحن",
+    "payment": "الدفع",
+    "review": "المراجعة"
+  },
+  "shipping": {
+    "heading": "عنوان الشحن",
+    "fullName": "الاسم الكامل",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "addressLine2": "شقة، وحدة، إلخ. (اختياري)",
+    "city": "المدينة",
+    "country": "الدولة",
+    "postalCode": "الرمز البريدي",
+    "continue": "المتابعة للدفع"
+  },
+  "payment": {
+    "heading": "الدفع",
+    "cardNumber": "رقم البطاقة",
+    "expiry": "تاريخ الانتهاء",
+    "cvc": "CVC",
+    "securityNote": "دفعتك مشفّرة وتُعالج بأمان.",
+    "continue": "مراجعة الطلب"
+  },
+  "review": {
+    "heading": "راجع طلبك",
+    "placeOrder": "تأكيد الطلب"
+  },
+  "confirmation": {
+    "heading": "تم تأكيد الطلب",
+    "body": "استلمنا طلبك وسنبدأ بمعالجته فورًا.",
+    "orderNumber": "رقم الطلب",
+    "trackOrder": "تتبع طلبك"
+  },
+  "back": "رجوع"
+}

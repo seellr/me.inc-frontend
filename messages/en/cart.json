@@ -1,0 +1,23 @@
+{
+  "title": "Cart",
+  "orderSummary": "Order summary",
+  "subtotal": "Subtotal",
+  "shipping": "Shipping",
+  "free": "Free",
+  "total": "Total",
+  "promoPlaceholder": "Promo code",
+  "apply": "Apply",
+  "checkout": "Checkout",
+  "decrease": "Decrease quantity",
+  "increase": "Increase quantity",
+  "remove": "Remove item",
+  "emptyTitle": "Your cart is empty",
+  "emptyBody": "Looks like you haven't added anything yet.",
+  "continueShopping": "Continue shopping",
+  "steps": {
+    "cart": "Cart",
+    "shipping": "Shipping",
+    "payment": "Payment",
+    "confirmation": "Confirmation"
+  }
+}

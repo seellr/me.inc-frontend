@@ -1,0 +1,41 @@
+{
+  "tagline": "Your trusted destination for shopping with confidence and quality.",
+  "newsletterLabel": "Subscribe to our newsletter",
+  "newsletterPlaceholder": "your email...",
+  "ctaHeadline": "Track your order in seconds",
+  "ctaButton": "Track an order",
+  "copyright": "© {year} me.inc. All rights reserved.",
+  "legal": [
+    { "label": "Terms of service", "href": "/terms" },
+    { "label": "Privacy policy", "href": "/privacy" }
+  ],
+  "columns": [
+    {
+      "heading": "Shop",
+      "links": [
+        { "label": "All products", "href": "/shop" },
+        { "label": "New arrivals", "href": "/new" },
+        { "label": "Sale", "href": "/sale" },
+        { "label": "Gift cards", "href": "/gift-cards" }
+      ]
+    },
+    {
+      "heading": "Company",
+      "links": [
+        { "label": "About us", "href": "/about" },
+        { "label": "Blog", "href": "/blog" },
+        { "label": "Careers", "href": "/careers" },
+        { "label": "Contact", "href": "/contact" }
+      ]
+    },
+    {
+      "heading": "Support",
+      "links": [
+        { "label": "FAQ", "href": "/faq" },
+        { "label": "Shipping & returns", "href": "/shipping" },
+        { "label": "Privacy policy", "href": "/privacy" },
+        { "label": "Terms of service", "href": "/terms" }
+      ]
+    }
+  ]
+}
