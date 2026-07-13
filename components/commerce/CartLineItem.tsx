@@ -12,15 +12,16 @@ export function CartLineItem({ item }: { item: CartItem }) {
   const locale = useLocale()
   const t = useTranslations('cart')
   const { updateQuantity, removeItem } = useCart()
+  const href = item.slug ? `/products/${item.slug}` : '/products'
 
   return (
     <div className="flex items-center gap-4 border-b border-border py-4 last:border-0">
-      <Link href={`/products/${item.slug}`} className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted">
+      <Link href={href} className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted">
         <Image src={item.image} alt={item.name} fill className="object-contain p-3" />
       </Link>
 
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <Link href={`/products/${item.slug}`} className="line-clamp-1 text-sm font-semibold text-foreground no-underline">
+        <Link href={href} className="line-clamp-1 text-sm font-semibold text-foreground no-underline">
           {item.name}
         </Link>
         {item.variant && <span className="caption">{item.variant}</span>}
@@ -31,7 +32,7 @@ export function CartLineItem({ item }: { item: CartItem }) {
         <button
           type="button"
           aria-label={t('decrease')}
-          onClick={() => updateQuantity(item.productId, item.quantity - 1, item.variant)}
+          onClick={() => updateQuantity(item.productId, item.quantity - 1)}
           className="flex size-7 items-center justify-center rounded-full text-foreground/70 hover:bg-muted"
         >
           <Minus className="size-3.5" />
@@ -40,7 +41,7 @@ export function CartLineItem({ item }: { item: CartItem }) {
         <button
           type="button"
           aria-label={t('increase')}
-          onClick={() => updateQuantity(item.productId, item.quantity + 1, item.variant)}
+          onClick={() => updateQuantity(item.productId, item.quantity + 1)}
           className="flex size-7 items-center justify-center rounded-full text-foreground/70 hover:bg-muted"
         >
           <Plus className="size-3.5" />
@@ -50,7 +51,7 @@ export function CartLineItem({ item }: { item: CartItem }) {
       <button
         type="button"
         aria-label={t('remove')}
-        onClick={() => removeItem(item.productId, item.variant)}
+        onClick={() => removeItem(item.productId)}
         className="flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-destructive"
       >
         <X className="size-4" />

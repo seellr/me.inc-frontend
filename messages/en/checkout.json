@@ -18,12 +18,15 @@
   },
   "payment": {
     "heading": "Payment",
+    "codOnly": "Cash on delivery — pay when your order arrives.",
     "cardNumber": "Card number",
     "expiry": "Expiry",
     "cvc": "CVC",
     "securityNote": "Your payment is encrypted and processed securely.",
     "continue": "Review order"
   },
+  "loginRequired": "Log in to check out.",
+  "goToLogin": "Log in",
   "review": {
     "heading": "Review your order",
     "placeOrder": "Place order"

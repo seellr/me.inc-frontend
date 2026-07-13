@@ -18,12 +18,15 @@
   },
   "payment": {
     "heading": "الدفع",
+    "codOnly": "الدفع عند الاستلام — ادفع عند وصول طلبك.",
     "cardNumber": "رقم البطاقة",
     "expiry": "تاريخ الانتهاء",
     "cvc": "CVC",
     "securityNote": "دفعتك مشفّرة وتُعالج بأمان.",
     "continue": "مراجعة الطلب"
   },
+  "loginRequired": "سجّل الدخول لإتمام الشراء.",
+  "goToLogin": "تسجيل الدخول",
   "review": {
     "heading": "راجع طلبك",
     "placeOrder": "تأكيد الطلب"

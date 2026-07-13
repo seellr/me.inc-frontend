@@ -12,8 +12,9 @@ import { Input } from '@/components/ui/input'
 import { PriceSummary } from '@/components/commerce/PriceSummary'
 import { JourneyProgress } from '@/components/commerce/JourneyProgress'
 import { useCart } from '@/lib/cart/context'
-import { placeOrder } from '@/lib/orders'
-import type { Address, Order } from '@/types/commerce'
+import { customerFetchClient } from '@/lib/customer/api-client'
+import type { Address } from '@/types/commerce'
+import type { Order } from '@/types/dto/order.dto'
 
 type Step = 'shipping' | 'payment' | 'review'
 
@@ -32,12 +33,27 @@ const EMPTY_ADDRESS: Address = {
 export default function CheckoutPage() {
   const t = useTranslations('checkout')
   const tCart = useTranslations('cart')
-  const { items, subtotal, clear } = useCart()
+  const { items, subtotal, clear, isAuthenticated } = useCart()
 
   const [step, setStep] = useState<Step>('shipping')
   const [address, setAddress] = useState<Address>(EMPTY_ADDRESS)
   const [email, setEmail] = useState('')
   const [order, setOrder] = useState<Order | null>(null)
+  const [isPlacing, setIsPlacing] = useState(false)
+  const [placeError, setPlaceError] = useState<string | null>(null)
+
+  if (!isAuthenticated) {
+    return (
+      <Section as="div" spacing="none" className="section-y">
+        <Container className="text-center">
+          <p className="body">{t('loginRequired')}</p>
+          <Button render={<Link href="/login" />} className="mt-4">
+            {t('goToLogin')}
+          </Button>
+        </Container>
+      </Section>
+    )
+  }
 
   if (order) {
     return (
@@ -47,7 +63,7 @@ export default function CheckoutPage() {
           <h1 className="heading-2">{t('confirmation.heading')}</h1>
           <p className="body mt-2">{t('confirmation.body')}</p>
           <p className="mt-6 text-sm text-muted-foreground">{t('confirmation.orderNumber')}</p>
-          <p className="text-2xl font-bold tracking-wide text-foreground">{order.number}</p>
+          <p className="text-2xl font-bold tracking-wide text-foreground">{order.invoice_number ?? order.ulid}</p>
           <Button render={<Link href="/orders/lookup" />} size="lg" className="mt-8">
             {t('confirmation.trackOrder')}
           </Button>
@@ -69,10 +85,46 @@ export default function CheckoutPage() {
     )
   }
 
-  const handlePlaceOrder = () => {
-    const placed = placeOrder({ email, items, subtotal, shipping: SHIPPING_ESTIMATE, address })
-    clear()
-    setOrder(placed)
+  const handlePlaceOrder = async () => {
+    setIsPlacing(true)
+    setPlaceError(null)
+    try {
+      // payment_method=4 (Cod). Card/Paymob/Stripe checkout (iframe redirect,
+      // Stripe Elements) is a separate integration not built in this pass —
+      // COD is the one path this form completes end-to-end.
+      const orderResult = await customerFetchClient<Order>('/orders', {
+        method: 'POST',
+        body: JSON.stringify({
+          payment_method: 4,
+          shipping_name: address.fullName,
+          shipping_phone: address.phone,
+          shipping_address: address.line1,
+          shipping_city: address.city,
+          shipping_country: address.country,
+        }),
+      })
+
+      if (!orderResult.ok) {
+        setPlaceError(orderResult.message)
+        return
+      }
+
+      const payResult = await customerFetchClient(`/orders/${orderResult.data.ulid}/pay`, {
+        method: 'POST',
+        headers: { 'Idempotency-Key': crypto.randomUUID() },
+        body: JSON.stringify({ method: 'cod' }),
+      })
+
+      if (!payResult.ok) {
+        setPlaceError(payResult.message)
+        return
+      }
+
+      await clear()
+      setOrder(orderResult.data)
+    } finally {
+      setIsPlacing(false)
+    }
   }
 
   return (
@@ -155,11 +207,7 @@ export default function CheckoutPage() {
             {step === 'payment' && (
               <Card variant="static" className="flex flex-col gap-4">
                 <p className="text-lg font-semibold">{t('payment.heading')}</p>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Input required placeholder={t('payment.cardNumber')} className="sm:col-span-2" inputMode="numeric" />
-                  <Input required placeholder={t('payment.expiry')} />
-                  <Input required placeholder={t('payment.cvc')} inputMode="numeric" />
-                </div>
+                <p className="body text-sm text-muted-foreground">{t('payment.codOnly')}</p>
                 <p className="caption flex items-center gap-1.5">
                   <ShieldCheck className="size-4" /> {t('payment.securityNote')}
                 </p>
@@ -187,11 +235,14 @@ export default function CheckoutPage() {
                   <span>{address.phone}</span>
                   <span>{email}</span>
                 </div>
+                {placeError && <p className="text-sm text-destructive">{placeError}</p>}
                 <div className="flex justify-between">
                   <Button variant="outline" onClick={() => setStep('payment')}>
                     {t('back')}
                   </Button>
-                  <Button onClick={handlePlaceOrder}>{t('review.placeOrder')}</Button>
+                  <Button onClick={handlePlaceOrder} disabled={isPlacing}>
+                    {isPlacing ? '...' : t('review.placeOrder')}
+                  </Button>
                 </div>
               </Card>
             )}

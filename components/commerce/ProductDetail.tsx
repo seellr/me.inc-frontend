@@ -33,15 +33,7 @@ export function ProductDetail({
   const [added, setAdded] = useState(false)
 
   const handleAddToCart = () => {
-    addItem({
-      productId: product.id,
-      slug: product.slug,
-      name: product.name,
-      image: product.image,
-      price: product.price,
-      quantity,
-      variant,
-    })
+    addItem(product.id, quantity)
     setAdded(true)
     setTimeout(() => setAdded(false), 1800)
   }

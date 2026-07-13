@@ -66,16 +66,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
           <button
             type="button"
             aria-label={t('addToCart')}
-            onClick={() =>
-              addItem({
-                productId: product.id,
-                slug: product.slug,
-                name: product.name,
-                image: product.image,
-                price: product.price,
-                quantity,
-              })
-            }
+            onClick={() => addItem(product.id, quantity)}
             className="flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-background transition-transform hover:scale-105"
           >
             <ShoppingCart className="size-3.5" />
