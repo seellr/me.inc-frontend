@@ -3,14 +3,11 @@ import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { Toaster } from 'sileo'
+import { DirectionProvider } from '@base-ui/react/direction-provider'
 import '../globals.css'
 import { cn } from '@/lib/utils'
 import { chillax, thmanyah } from '@/lib/fonts'
 import { routing } from '@/i18n/routing'
-import { SmoothScroll } from '@/components/smooth-scroll'
-import { Navbar } from '@/components/navbar'
-import { Footer } from '@/components/footer'
-import { CartProvider } from '@/lib/cart/context'
 
 const DIRECTION: Record<string, 'rtl' | 'ltr'> = { ar: 'rtl', en: 'ltr' }
 
@@ -43,15 +40,11 @@ export default async function LocaleLayout({
       className={cn('h-full', 'antialiased', 'font-sans', chillax.variable, thmanyah.variable)}
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider messages={messages}>
-          <CartProvider>
-            <SmoothScroll>
-              <Navbar />
-              {children}
-              <Footer />
-            </SmoothScroll>
-          </CartProvider>
-        </NextIntlClientProvider>
+        <DirectionProvider direction={DIRECTION[locale]}>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </DirectionProvider>
       </body>
       <Toaster position="top-right" />
     </html>
