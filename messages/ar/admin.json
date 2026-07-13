@@ -15,5 +15,48 @@
     "and": "و",
     "privacy": "سياسة الخصوصية",
     "heroText": "أدر كل علاماتك التجارية ومنتجاتك وطلباتك من مكان واحد."
+  },
+  "products": {
+    "title": "المنتجات",
+    "new": "منتج جديد",
+    "empty": "لا توجد منتجات بعد",
+    "table": {
+      "name": "الاسم",
+      "sku": "رمز المنتج",
+      "type": "النوع",
+      "price": "السعر",
+      "status": "الحالة",
+      "actions": "إجراءات"
+    },
+    "form": {
+      "internalName": "الاسم الداخلي",
+      "nameAr": "الاسم (عربي)",
+      "nameEn": "الاسم (إنجليزي)",
+      "oneLinerAr": "وصف مختصر (عربي)",
+      "oneLinerEn": "وصف مختصر (إنجليزي)",
+      "type": "النوع",
+      "sku": "رمز المنتج",
+      "basePrice": "السعر الأساسي",
+      "currency": "العملة",
+      "couponEligible": "قابل للخصم بكوبون",
+      "featured": "مميز",
+      "save": "حفظ",
+      "saveSuccess": "تم حفظ المنتج",
+      "saveError": "تعذر حفظ المنتج",
+      "deleteConfirmTitle": "حذف هذا المنتج؟",
+      "deleteConfirmBody": "لا يمكن التراجع عن هذا الإجراء.",
+      "deleteConfirm": "حذف",
+      "deleteCancel": "إلغاء",
+      "deleteSuccess": "تم حذف المنتج",
+      "deleteError": "تعذر حذف المنتج"
+    },
+    "validation": {
+      "nameRequired": "الاسم مطلوب",
+      "nameTooLong": "الاسم طويل جدًا",
+      "typeInvalid": "اختر نوع منتج صالح",
+      "skuInvalid": "رمز المنتج يجب أن يحتوي على حروف وأرقام و - و _ فقط",
+      "priceInvalid": "أدخل سعرًا صالحًا",
+      "currencyInvalid": "العملة يجب أن تكون 3 أحرف"
+    }
   }
 }

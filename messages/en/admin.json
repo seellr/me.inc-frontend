@@ -15,5 +15,48 @@
     "and": "&",
     "privacy": "Privacy Policy",
     "heroText": "Manage every brand, product, and order from one place."
+  },
+  "products": {
+    "title": "Products",
+    "new": "New Product",
+    "empty": "No products yet",
+    "table": {
+      "name": "Name",
+      "sku": "SKU",
+      "type": "Type",
+      "price": "Price",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "form": {
+      "internalName": "Internal name",
+      "nameAr": "Name (Arabic)",
+      "nameEn": "Name (English)",
+      "oneLinerAr": "One-liner (Arabic)",
+      "oneLinerEn": "One-liner (English)",
+      "type": "Type",
+      "sku": "SKU",
+      "basePrice": "Base price",
+      "currency": "Currency",
+      "couponEligible": "Coupon eligible",
+      "featured": "Featured",
+      "save": "Save",
+      "saveSuccess": "Product saved",
+      "saveError": "Could not save product",
+      "deleteConfirmTitle": "Delete this product?",
+      "deleteConfirmBody": "This cannot be undone.",
+      "deleteConfirm": "Delete",
+      "deleteCancel": "Cancel",
+      "deleteSuccess": "Product deleted",
+      "deleteError": "Could not delete product"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameTooLong": "Name is too long",
+      "typeInvalid": "Select a valid product type",
+      "skuInvalid": "SKU can only contain letters, numbers, - and _",
+      "priceInvalid": "Enter a valid price",
+      "currencyInvalid": "Currency must be 3 letters"
+    }
   }
 }
