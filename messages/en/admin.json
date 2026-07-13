@@ -2,6 +2,9 @@
   "nav": {
     "dashboard": "Dashboard",
     "products": "Products",
+    "orders": "Orders",
+    "coupons": "Coupons",
+    "profile": "Profile",
     "logout": "Log out"
   },
   "login": {
@@ -58,5 +61,73 @@
       "priceInvalid": "Enter a valid price",
       "currencyInvalid": "Currency must be 3 letters"
     }
+  },
+  "orders": {
+    "title": "Orders",
+    "empty": "No orders yet",
+    "table": {
+      "invoice": "Invoice",
+      "status": "Status",
+      "total": "Total",
+      "payment": "Payment",
+      "date": "Date"
+    },
+    "detail": {
+      "back": "Back to orders",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "vat": "VAT",
+      "total": "Total",
+      "paymentMethod": "Payment method",
+      "paymentGateway": "Payment gateway",
+      "shipping": "Requires shipping",
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  "coupons": {
+    "title": "Coupons",
+    "new": "New Coupon",
+    "empty": "No coupons yet",
+    "table": {
+      "code": "Code",
+      "type": "Type",
+      "value": "Value",
+      "uses": "Uses",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "form": {
+      "code": "Code",
+      "type": "Type",
+      "value": "Value",
+      "maxUses": "Max uses",
+      "expiresAt": "Expires at",
+      "active": "Active",
+      "save": "Save",
+      "saveSuccess": "Coupon saved",
+      "saveError": "Could not save coupon",
+      "deleteConfirmTitle": "Delete this coupon?",
+      "deleteConfirmBody": "This cannot be undone.",
+      "deleteConfirm": "Delete",
+      "deleteCancel": "Cancel",
+      "deleteSuccess": "Coupon deleted",
+      "deleteError": "Could not delete coupon"
+    },
+    "validation": {
+      "codeInvalid": "Code must be 3-50 letters, numbers, - or _",
+      "typeInvalid": "Select a valid coupon type",
+      "valueInvalid": "Enter a valid value"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "role": "Role",
+    "superAdmin": "Super admin",
+    "status": "Status",
+    "active": "Active"
   }
 }

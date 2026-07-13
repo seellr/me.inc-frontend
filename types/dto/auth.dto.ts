@@ -15,7 +15,7 @@ export const AdminSchema = z.object({
   status: z.number(),
   roles: z.array(z.string()),
   permissions: z.array(z.string()),
-  created_at: z.string().nullable(),
+  created_at: z.string().nullable().optional(),
 })
 export type Admin = z.infer<typeof AdminSchema>
 

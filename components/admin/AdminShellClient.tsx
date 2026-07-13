@@ -7,7 +7,7 @@ import {
   Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton,
   SidebarMenuItem, SidebarProvider, SidebarTrigger, SidebarInset,
 } from '@/components/ui/sidebar'
-import { LayoutDashboard, Package, LogOut } from 'lucide-react'
+import { LayoutDashboard, Package, ShoppingCart, Ticket, User, LogOut } from 'lucide-react'
 
 export function AdminShellClient({ children, locale }: { children: React.ReactNode; locale: string }) {
   const t = useTranslations('admin')
@@ -35,6 +35,24 @@ export function AdminShellClient({ children, locale }: { children: React.ReactNo
               <SidebarMenuButton onClick={() => router.push(`/${locale}/admin/products`)}>
                 <Package data-icon="inline-start" />
                 {t('nav.products')}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={() => router.push(`/${locale}/admin/orders`)}>
+                <ShoppingCart data-icon="inline-start" />
+                {t('nav.orders')}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={() => router.push(`/${locale}/admin/coupons`)}>
+                <Ticket data-icon="inline-start" />
+                {t('nav.coupons')}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={() => router.push(`/${locale}/admin/profile`)}>
+                <User data-icon="inline-start" />
+                {t('nav.profile')}
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>

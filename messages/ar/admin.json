@@ -2,6 +2,9 @@
   "nav": {
     "dashboard": "لوحة التحكم",
     "products": "المنتجات",
+    "orders": "الطلبات",
+    "coupons": "الكوبونات",
+    "profile": "الملف الشخصي",
     "logout": "تسجيل الخروج"
   },
   "login": {
@@ -58,5 +61,73 @@
       "priceInvalid": "أدخل سعرًا صالحًا",
       "currencyInvalid": "العملة يجب أن تكون 3 أحرف"
     }
+  },
+  "orders": {
+    "title": "الطلبات",
+    "empty": "لا توجد طلبات بعد",
+    "table": {
+      "invoice": "الفاتورة",
+      "status": "الحالة",
+      "total": "الإجمالي",
+      "payment": "الدفع",
+      "date": "التاريخ"
+    },
+    "detail": {
+      "back": "العودة إلى الطلبات",
+      "subtotal": "المجموع الفرعي",
+      "discount": "الخصم",
+      "vat": "الضريبة",
+      "total": "الإجمالي",
+      "paymentMethod": "طريقة الدفع",
+      "paymentGateway": "بوابة الدفع",
+      "shipping": "يتطلب شحن",
+      "yes": "نعم",
+      "no": "لا"
+    }
+  },
+  "coupons": {
+    "title": "الكوبونات",
+    "new": "كوبون جديد",
+    "empty": "لا توجد كوبونات بعد",
+    "table": {
+      "code": "الرمز",
+      "type": "النوع",
+      "value": "القيمة",
+      "uses": "الاستخدامات",
+      "status": "الحالة",
+      "actions": "إجراءات"
+    },
+    "form": {
+      "code": "الرمز",
+      "type": "النوع",
+      "value": "القيمة",
+      "maxUses": "الحد الأقصى للاستخدام",
+      "expiresAt": "تاريخ الانتهاء",
+      "active": "مفعّل",
+      "save": "حفظ",
+      "saveSuccess": "تم حفظ الكوبون",
+      "saveError": "تعذر حفظ الكوبون",
+      "deleteConfirmTitle": "حذف هذا الكوبون؟",
+      "deleteConfirmBody": "لا يمكن التراجع عن هذا الإجراء.",
+      "deleteConfirm": "حذف",
+      "deleteCancel": "إلغاء",
+      "deleteSuccess": "تم حذف الكوبون",
+      "deleteError": "تعذر حذف الكوبون"
+    },
+    "validation": {
+      "codeInvalid": "الرمز يجب أن يكون 3-50 حرفًا أو رقمًا أو - أو _",
+      "typeInvalid": "اختر نوع كوبون صالح",
+      "valueInvalid": "أدخل قيمة صالحة"
+    }
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "role": "الدور",
+    "superAdmin": "مدير عام",
+    "status": "الحالة",
+    "active": "مفعّل"
   }
 }
