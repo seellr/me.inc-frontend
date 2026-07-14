@@ -21,7 +21,7 @@ export interface StoreProduct {
   category: string
   categorySlug: string
   price: number
-  image: string
+  image: string | null
   description: string
   rating: number
   reviews: number

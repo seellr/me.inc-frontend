@@ -43,7 +43,7 @@ export function Footer() {
             <p className="mt-1 max-w-sm text-sm text-muted-foreground">{t('tagline')}</p>
             <div className="mt-4 flex max-w-sm items-center gap-2">
               <Input id="footer-email" type="email" placeholder={t('newsletterPlaceholder')} />
-              <Button size="icon" aria-label={t('newsletterLabel')} className="bg-amber text-amber-foreground shrink-0">
+              <Button variant="secondary" size="icon" aria-label={t('newsletterLabel')} className="shrink-0">
                 <ArrowRight className="rtl:rotate-180" />
               </Button>
             </div>
@@ -52,7 +52,7 @@ export function Footer() {
           <Card variant="dark" className="bg-primary text-primary-foreground flex flex-col justify-between gap-6">
             <p className="heading-4 text-primary-foreground">{t('ctaHeadline')}</p>
             <div className="flex items-center justify-between gap-4">
-              <Button render={<Link href="/orders/lookup" />} variant="secondary">
+              <Button render={<Link href="/orders/lookup" />} nativeButton={false} variant="default" className="bg-secondary text-secondary-foreground" >
                 {t('ctaButton')}
               </Button>
               <span className="text-sm font-semibold opacity-80">me.inc</span>

@@ -7,6 +7,7 @@
   "total": "الإجمالي",
   "promoPlaceholder": "كود الخصم",
   "apply": "تطبيق",
+  "invalidPromo": "كود الخصم غير صالح",
   "checkout": "إتمام الشراء",
   "decrease": "إنقاص الكمية",
   "increase": "زيادة الكمية",

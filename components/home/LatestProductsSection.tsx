@@ -18,7 +18,7 @@ export function LatestProductsSection({ products }: { products: StoreProduct[] }
             <p className="eyebrow mb-3">{t('latestEyebrow')}</p>
             <h2 className="heading-2">{t('latestHeading')}</h2>
           </div>
-          <Button variant="outline" render={<Link href="/products" />}>
+          <Button variant="outline" nativeButton={false} render={<Link href="/products" />}>
             {t('latestCta')}
           </Button>
         </RevealOnScroll>

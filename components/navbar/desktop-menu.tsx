@@ -11,7 +11,7 @@ const triggerClass =
   'flex h-9 items-center gap-1 rounded-full px-4 py-1 text-sm font-medium text-foreground outline-none transition-colors hover:bg-muted data-popup-open:bg-muted data-popup-open:text-foreground'
 
 const contentTransitionClass =
-  'transition-[opacity,transform] duration-200 ease-out ' +
+  'transition-[opacity,transform] duration-200 ease-out' +
   'data-starting-style:opacity-0 data-ending-style:opacity-0 ' +
   'data-starting-style:data-[activation-direction=left]:-translate-x-4 ' +
   'data-starting-style:data-[activation-direction=right]:translate-x-4 ' +

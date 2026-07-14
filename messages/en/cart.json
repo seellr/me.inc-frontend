@@ -7,6 +7,7 @@
   "total": "Total",
   "promoPlaceholder": "Promo code",
   "apply": "Apply",
+  "invalidPromo": "Invalid promo code",
   "checkout": "Checkout",
   "decrease": "Decrease quantity",
   "increase": "Increase quantity",

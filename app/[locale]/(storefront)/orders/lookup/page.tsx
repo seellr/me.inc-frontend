@@ -32,7 +32,7 @@ export default function OrderLookupPage() {
   }
 
   return (
-    <Section as="div" spacing="none" className="section-y">
+    <Section as="div" className="section-y">
       <Container className="mx-auto max-w-2xl">
         <h1 className="heading-2 mb-2 text-center">{t('heading')}</h1>
         <p className="body mb-8 text-center">{t('body')}</p>

@@ -39,7 +39,8 @@
   },
   "funnel": {
     "oto": {
-      "defaultHeadline": "عرض خاص لمرة واحدة"
+      "defaultHeadline": "عرض خاص لمرة واحدة",
+      "badge": "لفترة محدودة"
     },
     "downsell": {
       "defaultHeadline": "انتظر — إليك خيار أنسب"

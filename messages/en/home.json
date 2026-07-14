@@ -5,5 +5,49 @@
   "latestHeading": "Latest products",
   "latestCta": "View all products",
   "featuredEyebrow": "New this week",
-  "featuredCta": "Shop this product"
+  "featuredCta": "Shop this product",
+  "bundlesEyebrow": "Save more",
+  "bundlesHeading": "Bundle deals",
+  "bundlesCta": "View all bundles",
+  "intro": {
+    "body": "me.inc is a platform bringing together the best digital products in one place — from the book that changes how you think, to the course that moves your career forward, to the tool that saves you hours every day.",
+    "cta": "Learn more",
+    "marquee": "Always shopping — shop always",
+    "floatingAlt": "Digital product"
+  },
+  "splitStory": {
+    "storyAlt": "Our story",
+    "watchVideo": "Watch the video",
+    "videoTitle": "Our story video",
+    "storyLabel": "Our story",
+    "badge": "Our products",
+    "heading": "Always the right choice",
+    "body": "Every product on me.inc goes through manual review before it's published — we read the book, watch the course, and try the tool. If it reaches you from us, it's worth your time and money.",
+    "cta": "Explore"
+  },
+  "features": {
+    "heading": "Discover our global network",
+    "checklist": ["50+ brands", "Manually reviewed products", "14-day money-back guarantee"],
+    "email": "hello@meinc.com",
+    "items": [
+      { "title": "Instant delivery", "body": "Your digital product reaches your inbox within seconds of payment — no waiting." },
+      { "title": "Borderless service", "body": "Shop from anywhere in the world with local and international payment methods." },
+      { "title": "Personal support", "body": "A real support team that responds — not a chatbot going in circles." },
+      { "title": "Expertise in every field", "body": "Creators specialized in marketing, design, development, and entrepreneurship." }
+    ]
+  },
+  "showcase": {
+    "badge": "The store",
+    "headingLine1": "Digital products",
+    "headingLine2": "for every goal",
+    "shopCta": "Shop now",
+    "browseCta": "Browse products"
+  },
+  "cta": {
+    "headingLine1": "Your success",
+    "headingLine2": "starts here",
+    "body": "Thousands of Arab learners and entrepreneurs started their journey with one product from me.inc. Your first step takes less than a minute — pick your field and take the first product that changes your day.",
+    "cta": "Start your journey",
+    "floatingAlt": "Digital product"
+  }
 }

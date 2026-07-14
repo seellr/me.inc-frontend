@@ -1,22 +1,24 @@
 'use client'
 
 import { createContext, useContext, useCallback, useEffect, useMemo, useState } from 'react'
-import { customerFetchClient } from '@/lib/customer/api-client'
-import type { Cart, CartItemDto } from '@/types/dto/cart.dto'
 import type { CartItem } from '@/types/commerce'
 
-// Backend cart items don't include slug/image (no such fields in
-// CartItemResource) — falls back to the products listing page and a
-// placeholder image rather than adding another lookup round trip.
-function toCartItem(dto: CartItemDto): CartItem {
-  return {
-    productId: dto.product_ulid,
-    slug: '',
-    name: dto.product_name,
-    image: '/images/placeholder-product.png',
-    price: Number(dto.unit_price),
-    quantity: dto.quantity,
+const STORAGE_KEY = 'meinc_cart'
+
+function loadFromStorage(): CartItem[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? (JSON.parse(raw) as CartItem[]) : []
+  } catch {
+    return []
   }
+}
+
+function saveToStorage(items: CartItem[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+  } catch {}
 }
 
 type CartContextValue = {
@@ -25,77 +27,89 @@ type CartContextValue = {
   subtotal: number
   isLoading: boolean
   isAuthenticated: boolean
-  addItem: (productUlid: string, quantity?: number) => Promise<void>
+  addItem: (productUlid: string, quantity?: number, meta?: Partial<CartItem>) => Promise<void>
   removeItem: (productId: string) => Promise<void>
   updateQuantity: (productId: string, quantity: number) => Promise<void>
   clear: () => Promise<void>
   refresh: () => Promise<void>
+  setAuthenticated: (val: boolean) => void
 }
 
 const CartContext = createContext<CartContextValue | null>(null)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isAuthenticated, setIsAuthenticated] = useState(true)
+  const [hydrated, setHydrated] = useState(false)
 
-  const load = useCallback(async () => {
-    setIsLoading(true)
-    const result = await customerFetchClient<Cart>('/cart')
-    if (result.ok) {
-      setIsAuthenticated(true)
-      setItems(result.data.items.map(toCartItem))
-    } else if (result.status === 401) {
-      setIsAuthenticated(false)
-      setItems([])
-    }
-    setIsLoading(false)
+  useEffect(() => {
+    setItems(loadFromStorage())
+    setHydrated(true)
   }, [])
 
   useEffect(() => {
-    load()
-  }, [load])
+    if (hydrated) saveToStorage(items)
+  }, [items, hydrated])
 
-  const addItem = useCallback(async (productUlid: string, quantity = 1) => {
-    const result = await customerFetchClient<Cart>('/cart/items', {
-      method: 'POST',
-      body: JSON.stringify({ product_ulid: productUlid, quantity }),
+  const addItem = useCallback(async (productUlid: string, quantity = 1, meta?: Partial<CartItem>) => {
+    setItems((prev) => {
+      const existing = prev.find((i) => i.productId === productUlid)
+      if (existing) {
+        return prev.map((i) =>
+          i.productId === productUlid ? { ...i, quantity: i.quantity + quantity } : i
+        )
+      }
+      return [
+        ...prev,
+        {
+          productId: productUlid,
+          slug: meta?.slug ?? '',
+          name: meta?.name ?? productUlid,
+          image: meta?.image ?? null,
+          price: meta?.price ?? 0,
+          quantity,
+        },
+      ]
     })
-    if (result.ok) setItems(result.data.items.map(toCartItem))
   }, [])
 
   const removeItem = useCallback(async (productId: string) => {
-    const result = await customerFetchClient<Cart>(`/cart/items/${productId}`, { method: 'DELETE' })
-    if (result.ok) setItems(result.data.items.map(toCartItem))
+    setItems((prev) => prev.filter((i) => i.productId !== productId))
   }, [])
 
   const updateQuantity = useCallback(async (productId: string, quantity: number) => {
     if (quantity <= 0) {
-      await removeItem(productId)
+      setItems((prev) => prev.filter((i) => i.productId !== productId))
       return
     }
-    // No PATCH-quantity endpoint — remove then re-add at the new quantity.
-    await customerFetchClient(`/cart/items/${productId}`, { method: 'DELETE' })
-    const result = await customerFetchClient<Cart>('/cart/items', {
-      method: 'POST',
-      body: JSON.stringify({ product_ulid: productId, quantity }),
-    })
-    if (result.ok) setItems(result.data.items.map(toCartItem))
-  }, [removeItem])
+    setItems((prev) =>
+      prev.map((i) => (i.productId === productId ? { ...i, quantity } : i))
+    )
+  }, [])
 
   const clear = useCallback(async () => {
-    // No bulk-clear endpoint — remove items one at a time.
-    for (const item of items) {
-      await customerFetchClient(`/cart/items/${item.productId}`, { method: 'DELETE' })
-    }
     setItems([])
-  }, [items])
+  }, [])
+
+  const refresh = useCallback(async () => {}, [])
+  const setAuthenticated = useCallback((_val: boolean) => {}, [])
 
   const value = useMemo<CartContextValue>(() => {
     const count = items.reduce((sum, line) => sum + line.quantity, 0)
     const subtotal = items.reduce((sum, line) => sum + line.quantity * line.price, 0)
-    return { items, count, subtotal, isLoading, isAuthenticated, addItem, removeItem, updateQuantity, clear, refresh: load }
-  }, [items, isLoading, isAuthenticated, addItem, removeItem, updateQuantity, clear, load])
+    return {
+      items,
+      count,
+      subtotal,
+      isLoading: !hydrated,
+      isAuthenticated: true,
+      addItem,
+      removeItem,
+      updateQuantity,
+      clear,
+      refresh,
+      setAuthenticated,
+    }
+  }, [items, hydrated, addItem, removeItem, updateQuantity, clear, refresh, setAuthenticated])
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }

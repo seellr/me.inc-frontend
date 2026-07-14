@@ -155,6 +155,8 @@
   --shadow-ambient: 0 1px 2px oklch(0 0 0 / 0.04), 0 4px 12px oklch(0 0 0 / 0.06);
   --shadow-pop: 0 3px 0 0 var(--amber);
   --shadow-pop-active: 0 3px 0 0 var(--amber);
+  --shadow-pop-secondary: 0 3px 0 0 var(--primary);
+  --shadow-pop-secondary-active: 0 3px 0 0 var(--primary);
 }
 
 :root {
@@ -229,8 +231,16 @@
   --sidebar-accent: oklch(0.94 0.035 152);
   --sidebar-accent-foreground: oklch(0.3 0.07 158);
   --sidebar-border: oklch(0.9 0.012 110);
-  --sidebar-ring: oklch(0.56 0.115 158);
 }
+
+html[lang="ar"] {
+  --font-body: var(--font-thmanyah);
+}
+
+html[lang="en"] {
+  --font-body: var(--font-chillax) !important;
+}
+
 
 .dark {
   --background: oklch(0.165 0.014 165);
@@ -301,14 +311,6 @@
   html {
     @apply font-sans;
   }
-
-  html[lang="ar"] {
-    --font-body: var(--font-thmanyah);
-  }
-
-  html[lang="en"] {
-    --font-body: var(--font-chillax);
-  }
 }
 
 @layer components {
@@ -319,11 +321,13 @@
   }
 
   .section-y {
-    @apply py-section-sm lg:py-section;
+    padding-top: var(--spacing-section-sm);
+    padding-bottom: var(--spacing-section-sm);
   }
 
   .section-y-lg {
-    @apply py-section lg:py-section-lg;
+    padding-top: var(--spacing-section);
+    padding-bottom: var(--spacing-section);
   }
 
   /* --- Section surfaces (attention layers) --- */
@@ -416,6 +420,8 @@
     @apply rounded-xl bg-card p-card shadow-sm ring-1 ring-border transition-shadow hover:shadow-md;
   }
 
+  /* py-section* utilities are registered via @utility below — do not redefine here */
+
   /* --- Footer signature --- */
   .footer-aurora {
     background:
@@ -430,6 +436,41 @@
 
   .footer-wordmark {
     font-size: clamp(6rem, 19vw, 22rem);
+  }
+}
+
+/* ----------------------------------------------------------
+   SECTION PADDING UTILITIES
+   Registered via @utility so Tailwind v4 generates responsive
+   variants (lg:py-section, !py-section, etc.) properly.
+   ---------------------------------------------------------- */
+@utility py-section-sm {
+  padding-top: var(--spacing-section-sm);
+  padding-bottom: var(--spacing-section-sm);
+}
+
+@utility py-section {
+  padding-top: var(--spacing-section);
+  padding-bottom: var(--spacing-section);
+}
+
+@utility py-section-lg {
+  padding-top: var(--spacing-section-lg);
+  padding-bottom: var(--spacing-section-lg);
+}
+
+/* .section-y and .section-y-lg use direct media queries
+   because @apply with responsive prefixes (lg:) is not
+   supported in @layer components. */
+@media (min-width: theme(--breakpoint-lg)) {
+  .section-y {
+    padding-top: var(--spacing-section);
+    padding-bottom: var(--spacing-section);
+  }
+
+  .section-y-lg {
+    padding-top: var(--spacing-section-lg);
+    padding-bottom: var(--spacing-section-lg);
   }
 }
 

@@ -1,4 +1,10 @@
 {
   "language": "العربية",
-  "switchLanguage": "English"
+  "switchLanguage": "English",
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "body": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "home": "الرئيسية",
+    "shop": "تصفح المنتجات"
+  }
 }

@@ -39,6 +39,7 @@ export type NavMenu =
   | { kind: 'resources'; label: string; promos: PromoCard[]; columns: LinkColumn[] }
 
 export const navMenus: NavMenu[] = [
+  { kind: 'link', label: 'Shop', href: '/products' },
   {
     kind: 'product',
     label: 'Product',

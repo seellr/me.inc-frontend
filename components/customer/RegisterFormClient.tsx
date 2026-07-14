@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { sileo } from 'sileo'
+import { Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { CustomerRegisterRequestSchema, type CustomerRegisterRequest } from '@/types/dto/customer-auth.dto'
@@ -15,6 +16,7 @@ export function RegisterFormClient({ locale }: { locale: string }) {
   const t = useTranslations('auth')
   const router = useRouter()
   const [isPending, setIsPending] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const form = useForm<CustomerRegisterRequest>({
     resolver: zodResolver(CustomerRegisterRequestSchema),
@@ -42,7 +44,7 @@ export function RegisterFormClient({ locale }: { locale: string }) {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full max-w-sm">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full max-w-sm flex-col gap-5">
       <div className="flex gap-3">
         <div className="flex flex-col gap-1.5 flex-1">
           <label className="text-sm font-medium">{t('register.firstName')}</label>
@@ -70,7 +72,16 @@ export function RegisterFormClient({ locale }: { locale: string }) {
 
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium">{t('register.password')}</label>
-        <Input type="password" {...form.register('password')} />
+        <div className="relative">
+          <Input type={showPassword ? 'text' : 'password'} className="pe-10" {...form.register('password')} />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
+          >
+            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          </button>
+        </div>
         {form.formState.errors.password && (
           <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
         )}
@@ -78,18 +89,19 @@ export function RegisterFormClient({ locale }: { locale: string }) {
 
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium">{t('register.passwordConfirmation')}</label>
-        <Input type="password" {...form.register('password_confirmation')} />
+        <Input type={showPassword ? 'text' : 'password'} {...form.register('password_confirmation')} />
         {form.formState.errors.password_confirmation && (
           <p className="text-sm text-destructive">{form.formState.errors.password_confirmation.message}</p>
         )}
       </div>
 
-      <Button type="submit" disabled={isPending}>
+      <Button type="submit" disabled={isPending} size="lg">
         {isPending ? '...' : t('register.submit')}
       </Button>
+
       <p className="text-center text-sm text-muted-foreground">
         {t('register.haveAccount')}{' '}
-        <Link href={`/${locale}/login`} className="underline underline-offset-2">
+        <Link href={`/${locale}/login`} className="font-medium text-primary underline-offset-2 hover:underline">
           {t('register.loginLink')}
         </Link>
       </p>

@@ -13,7 +13,7 @@ export function productToStoreProduct(product: Product): StoreProduct {
     category: product.type.label,
     categorySlug: String(product.type.id),
     price: Number(product.sale_price ?? product.base_price),
-    image: product.hero_image_url ?? '/images/placeholder-product.png',
+    image: product.hero_image_url ?? null,
     description: product.one_liner ?? '',
     // Backend has no rating/review aggregate yet — 0 rather than fabricated.
     rating: 0,

@@ -12,11 +12,15 @@ export function makeCreateProductSchema(t: T) {
     delivery_method: z.number().int(),
     base_price: z.number().min(0, t('products.validation.priceInvalid')).max(999999.99),
     sale_price: z.number().min(0).optional(),
+    download_limit: z.number().int().min(1).max(1000).optional(),
+    access_expiry_days: z.number().int().min(1).max(3650).optional(),
     currency: z.string().length(3, t('products.validation.currencyInvalid')),
     vat_rule: z.number().int(),
     sku: z.string().max(80).regex(/^[A-Za-z0-9\-_]+$/, t('products.validation.skuInvalid')),
     coupon_eligible: z.boolean(),
     featured: z.boolean(),
+    crm_score_on_purchase: z.number().int().min(0).max(10000).optional(),
+    sort_order: z.number().int().min(0).optional(),
     translations: z.object({
       ar: z.object({
         name: z.string().min(1, t('products.validation.nameRequired')).max(200, t('products.validation.nameTooLong')),

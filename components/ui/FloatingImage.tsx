@@ -1,8 +1,7 @@
-'use client'
-
 import { useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
+import { cn } from '@/lib/utils'
 
 export function FloatingImage({
   src,
@@ -22,8 +21,8 @@ export function FloatingImage({
   const y = useTransform(scrollYProgress, [0, 1], [-range, range])
 
   return (
-    <motion.div ref={ref} style={{ y: reduced ? 0 : y }} className={className}>
-      <Image src={src} alt={alt} fill className="object-contain drop-shadow-2xl" />
+    <motion.div ref={ref} style={{ y: reduced ? 0 : y }} className={cn('overflow-hidden rounded-2xl', className)}>
+      <Image src={src} alt={alt} fill className="object-cover drop-shadow-2xl rounded-2xl" />
     </motion.div>
   )
 }

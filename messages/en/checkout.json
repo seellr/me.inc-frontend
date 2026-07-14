@@ -39,7 +39,8 @@
   },
   "funnel": {
     "oto": {
-      "defaultHeadline": "Special one-time offer"
+      "defaultHeadline": "Special one-time offer",
+      "badge": "Limited time"
     },
     "downsell": {
       "defaultHeadline": "Wait — here's a better fit"

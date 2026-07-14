@@ -25,6 +25,7 @@ export async function storeFetchServer<T>(path: string, revalidate = 300): Promi
       Accept: 'application/json',
       'x-api-key': API_KEY,
       'Accept-Language': locale,
+      'X-Brand-Id': process.env.BRAND_ID ?? '1',
     },
     next: { revalidate },
   })

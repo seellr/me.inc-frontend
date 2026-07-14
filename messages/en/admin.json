@@ -29,7 +29,9 @@
       "type": "Type",
       "price": "Price",
       "status": "Status",
-      "actions": "Actions"
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete"
     },
     "form": {
       "internalName": "Internal name",
@@ -41,6 +43,12 @@
       "sku": "SKU",
       "basePrice": "Base price",
       "currency": "Currency",
+      "salePrice": "Sale price",
+      "downloadLimit": "Download limit",
+      "accessExpiryDays": "Access expiry (days)",
+      "crmScore": "CRM score on purchase",
+      "sortOrder": "Sort order",
+      "status": "Status",
       "couponEligible": "Coupon eligible",
       "featured": "Featured",
       "save": "Save",

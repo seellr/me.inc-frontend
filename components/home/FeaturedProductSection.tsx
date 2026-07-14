@@ -17,7 +17,9 @@ export async function FeaturedProductSection({ product }: { product: StoreProduc
       <Container>
         <RevealOnScroll className="grid items-center gap-10 overflow-hidden rounded-3xl bg-card p-8 shadow-ambient ring-1 ring-border sm:p-12 lg:grid-cols-2">
           <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
-            <Image src={product.image} alt={product.name} fill className="object-contain p-10" />
+            {product.image ? (
+              <Image src={product.image} alt={product.name} fill className="object-contain p-10" />
+            ) : null}
           </div>
 
           <div className="flex flex-col items-start gap-4">
@@ -25,7 +27,7 @@ export async function FeaturedProductSection({ product }: { product: StoreProduc
             <h2 className="heading-2">{product.name}</h2>
             <p className="body-lg max-w-md">{product.description}</p>
             <p className="price text-2xl">{formatCurrency(product.price, locale)}</p>
-            <Button size="lg" render={<Link href={`/products/${product.slug}`} />}>
+            <Button nativeButton={false} size="lg" render={<Link href={`/products/${product.slug}`} />}>
               {t('featuredCta')}
             </Button>
           </div>

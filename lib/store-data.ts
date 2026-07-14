@@ -3,26 +3,29 @@ import type { StoreCategory, StoreProduct } from '@/types/commerce'
 export const STORE_CATEGORIES: StoreCategory[] = [
   {
     slug: 'books',
-    name: 'كتب رقمية',
-    heading: 'معرفة تقرأها في أي مكان',
-    body: 'كتب إلكترونية عربية مختارة بعناية في ريادة الأعمال والتسويق والتطوير الذاتي، تصلك فور الشراء.',
-    image: '/images/editorial/cat-books.svg',
+    name: 'Digital Books',
+    heading: 'Knowledge You Can Read Anywhere',
+    body: 'Carefully selected e-books on business, marketing, and personal growth delivered instantly after purchase.',
+    image:
+      'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80',
     color: 'pink',
   },
   {
     slug: 'courses',
-    name: 'دورات تدريبية',
-    heading: 'تعلّم من خبراء المجال',
-    body: 'دورات فيديو عملية خطوة بخطوة، بشهادات إتمام ووصول مدى الحياة لكل التحديثات.',
-    image: '/images/editorial/cat-courses.svg',
+    name: 'Online Courses',
+    heading: 'Learn from Industry Experts',
+    body: 'Practical step-by-step video courses with completion certificates and lifetime access to all updates.',
+    image:
+      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80',
     color: 'teal',
   },
   {
     slug: 'tools',
-    name: 'قوالب وأدوات',
-    heading: 'أنجز أسرع بأدوات جاهزة',
-    body: 'قوالب تصميم وجداول عمل وأدوات ذكاء اصطناعي توفر عليك ساعات من العمل اليدوي.',
-    image: '/images/editorial/cat-tools.svg',
+    name: 'Templates & Tools',
+    heading: 'Work Faster with Ready-Made Resources',
+    body: 'Design templates, business worksheets, and AI-powered tools that save hours of manual work.',
+    image:
+      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
     color: 'green',
   },
 ]

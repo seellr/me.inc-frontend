@@ -1,16 +1,10 @@
-import { SmoothScroll } from '@/components/smooth-scroll'
-import { Navbar } from '@/components/navbar'
-import { Footer } from '@/components/footer'
 import { CartProvider } from '@/lib/cart/context'
+import { StorefrontShell } from './StorefrontShell'
 
 export default function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
     <CartProvider>
-      <SmoothScroll>
-        <Navbar />
-        {children}
-        <Footer />
-      </SmoothScroll>
+      <StorefrontShell>{children}</StorefrontShell>
     </CartProvider>
   )
 }

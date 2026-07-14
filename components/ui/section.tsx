@@ -11,8 +11,8 @@ const sectionVariants = cva("w-full py-section-sm lg:py-section", {
     },
     spacing: {
       default: "",
-      lg: "!py-section lg:!py-section-lg",
-      none: "!py-0",
+      lg: "py-section! lg:py-section-lg!",
+      none: "py-0!",
     },
   },
   defaultVariants: {

@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   const res = await fetch(`${BACKEND_API_URL}/customer/auth/register`, {
     method: 'POST',
     headers: backendHeaders(locale),
-    body: JSON.stringify(parsed.data),
+    body: JSON.stringify({ ...parsed.data, brand_id: 1 }),
   })
   const json = await res.json().catch(() => ({}))
 

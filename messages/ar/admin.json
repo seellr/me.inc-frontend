@@ -29,7 +29,9 @@
       "type": "النوع",
       "price": "السعر",
       "status": "الحالة",
-      "actions": "إجراءات"
+      "actions": "إجراءات",
+      "edit": "تعديل",
+      "delete": "حذف"
     },
     "form": {
       "internalName": "الاسم الداخلي",
@@ -41,6 +43,12 @@
       "sku": "رمز المنتج",
       "basePrice": "السعر الأساسي",
       "currency": "العملة",
+      "salePrice": "سعر العرض",
+      "downloadLimit": "حد التنزيل",
+      "accessExpiryDays": "أيام انتهاء الوصول",
+      "crmScore": "نقاط CRM عند الشراء",
+      "sortOrder": "ترتيب العرض",
+      "status": "الحالة",
       "couponEligible": "قابل للخصم بكوبون",
       "featured": "مميز",
       "save": "حفظ",

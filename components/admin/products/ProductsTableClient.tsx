@@ -1,20 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { useProductsQuery } from '@/hooks/queries/useProducts'
 import { DeleteProductDialogClient } from './DeleteProductDialogClient'
+import { ProductSlidePanel } from './ProductSlidePanel'
 import type { Product } from '@/types/dto/product.dto'
 
 export function ProductsTableClient({ locale }: { locale: string }) {
   const t = useTranslations('admin.products')
-  const router = useRouter()
   const { data, isLoading } = useProductsQuery()
   const [pendingDelete, setPendingDelete] = useState<Product | null>(null)
+  const [editUlid, setEditUlid] = useState<string | null>(null)
 
   if (isLoading) return null
 
@@ -53,15 +53,11 @@ export function ProductsTableClient({ locale }: { locale: string }) {
               <TableCell>{product.status?.label ?? '—'}</TableCell>
               <TableCell className="text-end">
                 <div className="flex justify-end gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => router.push(`/${locale}/admin/products/${product.ulid}`)}
-                  >
-                    Edit
+                  <Button size="sm" variant="outline" onClick={() => setEditUlid(product.ulid)}>
+                    {t('table.edit')}
                   </Button>
                   <Button size="sm" variant="destructive" onClick={() => setPendingDelete(product)}>
-                    Delete
+                    {t('table.delete')}
                   </Button>
                 </div>
               </TableCell>
@@ -69,6 +65,14 @@ export function ProductsTableClient({ locale }: { locale: string }) {
           ))}
         </TableBody>
       </Table>
+
+      <ProductSlidePanel
+        ulid={editUlid}
+        open={!!editUlid}
+        onOpenChange={(open) => !open && setEditUlid(null)}
+        locale={locale}
+      />
+
       {pendingDelete && (
         <DeleteProductDialogClient
           ulid={pendingDelete.ulid}

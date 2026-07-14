@@ -15,6 +15,7 @@ export function backendHeaders(locale: string, token?: string | null): HeadersIn
     'Content-Type': 'application/json',
     'x-api-key': BACKEND_API_KEY,
     'Accept-Language': locale === 'ar' || locale === 'en' ? locale : 'en',
+    'X-Brand-Id': '1',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   }
 }

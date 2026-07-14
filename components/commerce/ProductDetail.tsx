@@ -3,18 +3,22 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
-import { Minus, Plus, Star, Check } from 'lucide-react'
+import { Minus, Plus, Check, ShoppingBag, Tag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ProductCard } from '@/components/commerce/ProductCard'
-import { ReviewsSection } from '@/components/commerce/ReviewsSection'
-import { FaqSection } from '@/components/commerce/FaqSection'
-import { StaggerGrid } from '@/components/motion'
+import { ProductCarousel } from '@/components/commerce/ProductCarousel'
 import { formatCurrency } from '@/lib/currency'
 import { useCart } from '@/lib/cart/context'
 import type { StoreProduct } from '@/types/commerce'
 
-type Tab = 'description' | 'specs' | 'shipping'
+function ProductImagePlaceholder({ name }: { name: string }) {
+  const initials = name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()
+  return (
+    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 via-muted to-primary/5">
+      <span className="font-display text-7xl font-bold text-primary/20 select-none">{initials}</span>
+    </div>
+  )
+}
 
 export function ProductDetail({
   product,
@@ -25,80 +29,59 @@ export function ProductDetail({
 }) {
   const locale = useLocale()
   const t = useTranslations('products')
-  const { addItem } = useCart()
+  const { addItem, isAuthenticated } = useCart()
 
-  const [variant, setVariant] = useState(product.variants?.[0])
   const [quantity, setQuantity] = useState(1)
-  const [tab, setTab] = useState<Tab>('description')
   const [added, setAdded] = useState(false)
 
   const handleAddToCart = () => {
-    addItem(product.id, quantity)
+    if (!isAuthenticated) {
+      window.location.href = `/${locale}/login`
+      return
+    }
+    addItem(product.id, quantity, { name: product.name, price: product.price, image: product.image, slug: product.slug })
     setAdded(true)
     setTimeout(() => setAdded(false), 1800)
   }
 
   return (
-    <div className="flex flex-col gap-16">
-      <div className="grid gap-10 lg:grid-cols-2">
-        {/* Gallery */}
-        <div className="flex flex-col gap-3">
-          <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
+    <div className="flex flex-col gap-16 lg:gap-24">
+      {/* Hero */}
+      <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
+        {/* Image */}
+        <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted shadow-ambient">
+          {product.image ? (
             <Image
               src={product.image}
               alt={product.name}
               fill
               priority
-              className="object-contain p-16 transition-transform duration-500 hover:scale-105"
+              className="object-cover transition-transform duration-700 hover:scale-105"
             />
-            {product.featured && <Badge variant="new" className="absolute top-4 start-4">{t('featured')}</Badge>}
-          </div>
+          ) : (
+            <ProductImagePlaceholder name={product.name} />
+          )}
+          {product.featured && (
+            <Badge variant="new" className="absolute top-4 start-4">{t('featured')}</Badge>
+          )}
         </div>
 
         {/* Info */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-6">
           <div>
-            <p className="caption">{product.category}</p>
-            <h1 className="heading-2 mt-1">{product.name}</h1>
+            <p className="caption mb-1 font-medium text-primary">{product.category}</p>
+            <h1 className="heading-2 leading-tight">{product.name}</h1>
+            {product.description && (
+              <p className="body mt-3 text-muted-foreground">{product.description}</p>
+            )}
           </div>
 
-          <div className="flex items-center gap-2 text-sm">
-            <div className="flex items-center gap-0.5 text-amber">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="size-4" fill={i < Math.round(product.rating) ? 'currentColor' : 'none'} />
-              ))}
-            </div>
-            <span className="text-muted-foreground">
-              {product.rating} ({product.reviews})
-            </span>
+          {/* Price */}
+          <div className="flex items-baseline gap-3">
+            <span className="price text-2xl">{formatCurrency(product.price, locale)}</span>
           </div>
 
-          <p className="price">{formatCurrency(product.price, locale)}</p>
-          <p className="body">{product.description}</p>
-
-          {product.variants && product.variants.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <span className="text-sm font-medium text-foreground">{t('title')}</span>
-              <div className="flex flex-wrap gap-2">
-                {product.variants.map((v) => (
-                  <button
-                    key={v}
-                    type="button"
-                    onClick={() => setVariant(v)}
-                    className={
-                      'rounded-full border px-3.5 py-1.5 text-sm transition-colors ' +
-                      (variant === v
-                        ? 'border-primary bg-primary/10 text-primary'
-                        : 'border-border text-foreground hover:bg-muted')
-                    }
-                  >
-                    {v}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
+          {/* Quantity */}
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium text-foreground">{t('quantity')}</span>
             <div className="flex w-fit items-center gap-1 rounded-full border border-border p-1">
@@ -109,7 +92,7 @@ export function ProductDetail({
               >
                 <Minus className="size-4" />
               </button>
-              <span className="w-8 text-center tabular-nums">{quantity}</span>
+              <span className="w-10 text-center tabular-nums font-medium">{quantity}</span>
               <button
                 type="button"
                 onClick={() => setQuantity((q) => q + 1)}
@@ -120,58 +103,34 @@ export function ProductDetail({
             </div>
           </div>
 
-          {/* Sticky on mobile so it stays reachable while scrolling the description */}
-          <div className="sticky bottom-4 z-10 pt-2 sm:static sm:pt-0">
-            <Button size="lg" onClick={handleAddToCart} className="w-full sm:w-auto">
+          {/* CTA */}
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Button size="lg" onClick={handleAddToCart} className="flex-1 sm:flex-none sm:min-w-48">
               {added ? (
-                <>
-                  <Check className="size-4" /> {t('addedToCart')}
-                </>
+                <><Check className="size-4" /> {t('addedToCart')}</>
+              ) : isAuthenticated ? (
+                <><ShoppingBag className="size-4" /> {t('addToCart')}</>
               ) : (
-                t('addToCart')
+                t('loginToAdd')
               )}
             </Button>
+          </div>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap gap-3 border-t border-border pt-5">
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Tag className="size-4 text-primary" />
+              <span>{product.category}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div>
-        <div className="flex gap-6 border-b border-border">
-          {(['description', 'specs', 'shipping'] as const).map((key) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setTab(key)}
-              className={
-                '-mb-px border-b-2 pb-3 text-sm font-medium transition-colors ' +
-                (tab === key ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground')
-              }
-            >
-              {t(`tabs.${key}`)}
-            </button>
-          ))}
-        </div>
-        <div className="body py-6">
-          {tab === 'description' && product.description}
-          {tab === 'specs' && `${product.category} · ${product.rating}★ (${product.reviews})`}
-          {tab === 'shipping' && t('shippingInfo')}
-        </div>
-      </div>
-
-      <ReviewsSection rating={product.rating} reviewCount={product.reviews} />
-
-      <FaqSection />
-
-      {/* Related products */}
+      {/* Related */}
       {related.length > 0 && (
         <div>
           <h2 className="heading-3 mb-6">{t('relatedTitle')}</h2>
-          <StaggerGrid className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
-            {related.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </StaggerGrid>
+          <ProductCarousel products={related} />
         </div>
       )}
     </div>

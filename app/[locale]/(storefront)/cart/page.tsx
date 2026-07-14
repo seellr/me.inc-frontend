@@ -18,9 +18,9 @@ export default function CartPage() {
   const { items, subtotal } = useCart()
 
   return (
-    <Section as="div" spacing="none" className="section-y">
+    <Section as="div" className="section-y">
       <Container>
-        <h1 className="heading-2 mb-2">{t('title')}</h1>
+        <h1 className="heading-2 mb-8">{t('title')}</h1>
         <JourneyProgress current="cart" />
 
         {items.length === 0 ? (
@@ -30,7 +30,7 @@ export default function CartPage() {
               <p className="text-lg font-semibold text-foreground">{t('emptyTitle')}</p>
               <p className="caption mt-1">{t('emptyBody')}</p>
             </div>
-            <Button render={<Link href="/products" />}>{t('continueShopping')}</Button>
+            <Button nativeButton={false} render={<Link href="/products" />}>{t('continueShopping')}</Button>
           </div>
         ) : (
           <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">

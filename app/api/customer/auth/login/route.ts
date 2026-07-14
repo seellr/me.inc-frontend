@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   const res = await fetch(`${BACKEND_API_URL}/customer/auth/login`, {
     method: 'POST',
     headers: backendHeaders(locale),
-    body: JSON.stringify(parsed.data),
+    body: JSON.stringify({ ...parsed.data, brand_id: 1 }),
   })
   const json = await res.json().catch(() => ({}))
 
@@ -30,7 +30,9 @@ export async function POST(request: NextRequest) {
   }
 
   const data = CustomerLoginResponseSchema.parse(json.data)
-  await setCustomerTokenCookie(data.access_token, data.expires_in)
+  const rememberMe = !!(body as Record<string, unknown>)?.remember_me
+  const maxAge = rememberMe ? 30 * 24 * 60 * 60 : (data.expires_in || 60 * 60)
+  await setCustomerTokenCookie(data.access_token, maxAge)
 
   return NextResponse.json({ success: true, data: { user: data.user } })
 }

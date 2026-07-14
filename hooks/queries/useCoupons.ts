@@ -1,5 +1,3 @@
-'use client'
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { adminFetchClient } from '@/lib/admin/api-client'
 import type { ApiMeta } from '@/lib/admin/api-server'

@@ -20,9 +20,9 @@ export type CustomerRegisterRequest = z.infer<typeof CustomerRegisterRequestSche
 
 export const CustomerSchema = z.object({
   ulid: z.string(),
-  first_name: z.string(),
-  last_name: z.string(),
-  name: z.string(),
+  first_name: z.string().nullable().optional(),
+  last_name: z.string().nullable().optional(),
+  name: z.string().nullable().optional(),
   email: z.string(),
   email_verified: z.boolean(),
   buyer_type: z.number().nullable().optional(),

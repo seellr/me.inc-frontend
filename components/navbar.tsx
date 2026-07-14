@@ -43,13 +43,13 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button
+            {/* <button
               type="button"
               aria-label={t('search')}
               className="hidden size-9 items-center justify-center rounded-full text-foreground/70 transition-colors hover:bg-muted hover:text-foreground sm:flex"
             >
               <Search className="size-4.5" />
-            </button>
+            </button> */}
             <Link
               href="/cart"
               aria-label={t('cart')}
@@ -65,7 +65,7 @@ export function Navbar() {
 
             <LocaleSwitcher />
 
-            <Button render={<Link href="/login" />} className="hidden sm:inline-flex">
+            <Button nativeButton={false} render={<Link href="/login" />} className="hidden sm:inline-flex">
               {t('account')}
             </Button>
 

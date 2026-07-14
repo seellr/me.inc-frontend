@@ -1,5 +1,10 @@
 {
   "search": "Search",
   "cart": "Cart",
-  "account": "Sign up"
+  "account": "Sign up",
+  "banner": {
+    "text": "Free shipping on orders over $50 — shop the latest digital products today.",
+    "cta": "Shop now →",
+    "close": "Close banner"
+  }
 }
