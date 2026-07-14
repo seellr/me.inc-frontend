@@ -15,8 +15,8 @@ type I18nContextValue = {
 
 const I18nContext = createContext<I18nContextValue | null>(null)
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(defaultLocale)
+export function I18nProvider({ children, initialLocale }: { children: React.ReactNode, initialLocale?: Locale }) {
+  const [locale, setLocaleState] = useState<Locale>(initialLocale || defaultLocale)
 
   useEffect(() => {
     const stored = window.localStorage.getItem(STORAGE_KEY)

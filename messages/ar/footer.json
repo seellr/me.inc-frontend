@@ -1,0 +1,41 @@
+{
+  "tagline": "وجهتك المفضلة للتسوق بثقة وجودة.",
+  "newsletterLabel": "اشترك في نشرتنا البريدية",
+  "newsletterPlaceholder": "بريدك الإلكتروني...",
+  "ctaHeadline": "تتبّع طلبك في ثوانٍ",
+  "ctaButton": "تتبع الطلب",
+  "copyright": "© {year} me.inc. جميع الحقوق محفوظة.",
+  "legal": [
+    { "label": "الشروط والأحكام", "href": "/terms" },
+    { "label": "سياسة الخصوصية", "href": "/privacy" }
+  ],
+  "columns": [
+    {
+      "heading": "المتجر",
+      "links": [
+        { "label": "كل المنتجات", "href": "/shop" },
+        { "label": "وصل حديثًا", "href": "/new" },
+        { "label": "العروض", "href": "/sale" },
+        { "label": "بطاقات الهدايا", "href": "/gift-cards" }
+      ]
+    },
+    {
+      "heading": "الشركة",
+      "links": [
+        { "label": "من نحن", "href": "/about" },
+        { "label": "المدونة", "href": "/blog" },
+        { "label": "الوظائف", "href": "/careers" },
+        { "label": "تواصل معنا", "href": "/contact" }
+      ]
+    },
+    {
+      "heading": "الدعم",
+      "links": [
+        { "label": "الأسئلة الشائعة", "href": "/faq" },
+        { "label": "الشحن والإرجاع", "href": "/shipping" },
+        { "label": "سياسة الخصوصية", "href": "/privacy" },
+        { "label": "الشروط والأحكام", "href": "/terms" }
+      ]
+    }
+  ]
+}

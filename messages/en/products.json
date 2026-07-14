@@ -1,0 +1,48 @@
+{
+  "title": "Products",
+  "featured": "Featured",
+  "addToCart": "Add to cart",
+  "loginToAdd": "Login to add to cart",
+  "addedToCart": "Added to cart",
+  "quantity": "Quantity",
+  "relatedTitle": "You may also like",
+  "sortLabel": "Sort",
+  "sort": {
+    "featured": "Featured",
+    "priceAsc": "Price: low to high",
+    "priceDesc": "Price: high to low",
+    "rating": "Top rated"
+  },
+  "filters": {
+    "title": "Filters",
+    "category": "Category",
+    "allCategories": "All categories",
+    "priceRange": "Price range"
+  },
+  "resultsCount": "{count} products",
+  "emptyState": "No products match your filters",
+  "tabs": {
+    "description": "Description",
+    "specs": "Specs",
+    "shipping": "Shipping"
+  },
+  "shippingInfo": "Free shipping on orders over 200 SAR. Delivered digitally within minutes of purchase confirmation.",
+  "reviews": {
+    "title": "Reviews",
+    "basedOn": "Based on {count} reviews",
+    "writeReview": "Write a review",
+    "sample": [
+      { "name": "Sara A.", "daysAgo": 3, "comment": "Exactly what I needed, delivered instantly and great quality." },
+      { "name": "Omar K.", "daysAgo": 12, "comment": "Clear, practical, and well organized. Would buy again." },
+      { "name": "Lina M.", "daysAgo": 27, "comment": "Good value for the price. A couple of sections felt a bit short." }
+    ]
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "items": [
+      { "question": "How do I receive my purchase?", "answer": "Digital products are delivered instantly to your account and email after checkout." },
+      { "question": "Can I get a refund?", "answer": "Yes, within 7 days of purchase if you haven't accessed more than 20% of the content." },
+      { "question": "Do I get lifetime access?", "answer": "Yes, all purchases include lifetime access and free updates." }
+    ]
+  }
+}

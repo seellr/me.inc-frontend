@@ -1,0 +1,24 @@
+{
+  "title": "السلة",
+  "orderSummary": "ملخص الطلب",
+  "subtotal": "المجموع الفرعي",
+  "shipping": "الشحن",
+  "free": "مجاني",
+  "total": "الإجمالي",
+  "promoPlaceholder": "كود الخصم",
+  "apply": "تطبيق",
+  "invalidPromo": "كود الخصم غير صالح",
+  "checkout": "إتمام الشراء",
+  "decrease": "إنقاص الكمية",
+  "increase": "زيادة الكمية",
+  "remove": "إزالة المنتج",
+  "emptyTitle": "سلتك فارغة",
+  "emptyBody": "يبدو أنك لم تُضِف شيئًا بعد.",
+  "continueShopping": "متابعة التسوق",
+  "steps": {
+    "cart": "السلة",
+    "shipping": "الشحن",
+    "payment": "الدفع",
+    "confirmation": "التأكيد"
+  }
+}

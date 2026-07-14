@@ -1,0 +1,56 @@
+{
+  "title": "إتمام الشراء",
+  "steps": {
+    "shipping": "الشحن",
+    "payment": "الدفع",
+    "review": "المراجعة"
+  },
+  "shipping": {
+    "heading": "عنوان الشحن",
+    "fullName": "الاسم الكامل",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "addressLine2": "شقة، وحدة، إلخ. (اختياري)",
+    "city": "المدينة",
+    "country": "الدولة",
+    "postalCode": "الرمز البريدي",
+    "continue": "المتابعة للدفع"
+  },
+  "payment": {
+    "heading": "الدفع",
+    "codOnly": "الدفع عند الاستلام — ادفع عند وصول طلبك.",
+    "cardNumber": "رقم البطاقة",
+    "expiry": "تاريخ الانتهاء",
+    "cvc": "CVC",
+    "securityNote": "دفعتك مشفّرة وتُعالج بأمان.",
+    "continue": "مراجعة الطلب"
+  },
+  "loginRequired": "سجّل الدخول لإتمام الشراء.",
+  "goToLogin": "تسجيل الدخول",
+  "review": {
+    "heading": "راجع طلبك",
+    "placeOrder": "تأكيد الطلب"
+  },
+  "confirmation": {
+    "heading": "تم تأكيد الطلب",
+    "body": "استلمنا طلبك وسنبدأ بمعالجته فورًا.",
+    "orderNumber": "رقم الطلب",
+    "trackOrder": "تتبع طلبك"
+  },
+  "funnel": {
+    "oto": {
+      "defaultHeadline": "عرض خاص لمرة واحدة",
+      "badge": "لفترة محدودة"
+    },
+    "downsell": {
+      "defaultHeadline": "انتظر — إليك خيار أنسب"
+    },
+    "complete": {
+      "heading": "تم كل شيء!",
+      "trackOrder": "تتبع طلبك"
+    },
+    "accept": "نعم، أضفه",
+    "decline": "لا شكرًا"
+  },
+  "back": "رجوع"
+}
