@@ -33,7 +33,7 @@ export interface CartItem {
   productId: string
   slug: string
   name: string
-  image: string
+  image: string | null
   price: number
   quantity: number
   variant?: string

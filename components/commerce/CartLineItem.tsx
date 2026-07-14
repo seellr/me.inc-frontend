@@ -17,7 +17,7 @@ export function CartLineItem({ item }: { item: CartItem }) {
   return (
     <div className="flex items-center gap-4 border-b border-border py-4 last:border-0">
       <Link href={href} className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted">
-        <Image src={item.image} alt={item.name} fill className="object-contain p-3" />
+        {item.image && <Image src={item.image} alt={item.name} fill className="object-contain p-3" />}
       </Link>
 
       <div className="flex min-w-0 flex-1 flex-col gap-1">

@@ -126,7 +126,7 @@ export function ProductsListing({
             )}
           </button>
 
-          <Select value={sort} onValueChange={setSort}>
+          <Select value={sort} onValueChange={(v) => v && setSort(v as Sort)}>
             <SelectTrigger className="w-[130px]">
               <SelectValue />
             </SelectTrigger>
