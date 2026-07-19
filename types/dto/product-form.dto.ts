@@ -21,6 +21,7 @@ export function makeCreateProductSchema(t: T) {
     featured: z.boolean(),
     crm_score_on_purchase: z.number().int().min(0).max(10000).optional(),
     sort_order: z.number().int().min(0).optional(),
+    hero_image_url: z.string().url().nullable().optional(),
     translations: z.object({
       ar: z.object({
         name: z.string().min(1, t('products.validation.nameRequired')).max(200, t('products.validation.nameTooLong')),
@@ -41,3 +42,4 @@ export function makeUpdateProductSchema(t: T) {
 }
 
 export type ProductFormValues = z.infer<ReturnType<typeof makeCreateProductSchema>>
+export type ProductUpdateFormValues = z.infer<ReturnType<typeof makeUpdateProductSchema>>

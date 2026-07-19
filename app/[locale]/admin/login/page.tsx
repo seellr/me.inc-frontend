@@ -1,9 +1,14 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { getAdminTokenCookie } from '@/lib/admin/auth'
 import { LoginFormClient } from '@/components/admin/LoginFormClient'
 
 export default async function AdminLoginPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
+  const token = await getAdminTokenCookie()
+  if (token) redirect(`/${locale}/admin`)
+
   const t = await getTranslations('admin')
 
   return (

@@ -5,7 +5,10 @@ import { useForm } from 'react-hook-form'
 import { sileo } from 'sileo'
 import { Trash2, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { LangTabs } from '@/components/admin/shared/LangTabs'
 import { useProductFaqs, useAddProductFaq, useDeleteProductFaq } from '@/hooks/queries/useProducts'
+
+const textAreaClass = 'flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y'
 
 export function ProductFaqsSection({ ulid }: { ulid: string }) {
   const { data: faqs = [] } = useProductFaqs(ulid)
@@ -44,20 +47,13 @@ export function ProductFaqsSection({ ulid }: { ulid: string }) {
     setShowForm(false)
   }
 
-  const textAreaClass = 'flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y'
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         {(faqs as Record<string, unknown>[]).map((faq) => (
           <div key={String(faq.id)} className="flex items-start justify-between rounded-lg border px-4 py-2">
             <span className="text-sm font-medium">{String(faq.question)}</span>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => deleteFaq.mutate(Number(faq.id))}
-            >
+            <Button type="button" variant="ghost" size="sm" onClick={() => deleteFaq.mutate(Number(faq.id))}>
               <Trash2 className="size-4 text-destructive" />
             </Button>
           </div>
@@ -66,24 +62,33 @@ export function ProductFaqsSection({ ulid }: { ulid: string }) {
 
       {showForm ? (
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3 rounded-lg border p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Arabic</p>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Question (AR) *</label>
-            <textarea {...form.register('translations.ar.question')} dir="rtl" rows={2} required className={textAreaClass} />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Answer (AR) *</label>
-            <textarea {...form.register('translations.ar.answer')} dir="rtl" rows={4} required className={textAreaClass} />
-          </div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">English</p>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Question (EN)</label>
-            <textarea {...form.register('translations.en.question')} dir="ltr" rows={2} className={textAreaClass} />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Answer (EN)</label>
-            <textarea {...form.register('translations.en.answer')} dir="ltr" rows={4} className={textAreaClass} />
-          </div>
+          <LangTabs
+            label="FAQ translations"
+            ar={
+              <>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium">Question (AR) *</label>
+                  <textarea {...form.register('translations.ar.question')} dir="rtl" rows={2} required className={textAreaClass} />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium">Answer (AR) *</label>
+                  <textarea {...form.register('translations.ar.answer')} dir="rtl" rows={4} required className={textAreaClass} />
+                </div>
+              </>
+            }
+            en={
+              <>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium">Question (EN)</label>
+                  <textarea {...form.register('translations.en.question')} dir="ltr" rows={2} className={textAreaClass} />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium">Answer (EN)</label>
+                  <textarea {...form.register('translations.en.answer')} dir="ltr" rows={4} className={textAreaClass} />
+                </div>
+              </>
+            }
+          />
           <div className="flex gap-2">
             <Button type="submit" size="sm" disabled={addFaq.isPending}>
               {addFaq.isPending ? '...' : 'Add FAQ'}

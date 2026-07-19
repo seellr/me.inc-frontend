@@ -6,7 +6,10 @@ import { sileo } from 'sileo'
 import { Trash2, Plus, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { LangTabs } from '@/components/admin/shared/LangTabs'
 import { useProductTestimonials, useAddProductTestimonial, useDeleteProductTestimonial } from '@/hooks/queries/useProducts'
+
+const textAreaClass = 'flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y'
 
 export function ProductTestimonialsSection({ ulid }: { ulid: string }) {
   const { data: testimonials = [] } = useProductTestimonials(ulid)
@@ -23,9 +26,9 @@ export function ProductTestimonialsSection({ ulid }: { ulid: string }) {
 
   async function onSubmit(values: Record<string, unknown>) {
     const result = await addTestimonial.mutateAsync({
-      name: values.name,
-      role: values.role || undefined,
-      avatar_url: values.avatar_url || undefined,
+      name: values.name as string | undefined,
+      role: (values.role as string) || undefined,
+      avatar_url: (values.avatar_url as string) || undefined,
       rating: values.rating ? Number(values.rating) : undefined,
       sort_order: values.sort_order ? Number(values.sort_order) : undefined,
       translations: {
@@ -54,12 +57,7 @@ export function ProductTestimonialsSection({ ulid }: { ulid: string }) {
                 <span className="text-xs text-muted-foreground">{t.role ? String(t.role) : ''}</span>
               </div>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => deleteTestimonial.mutate(Number(t.id))}
-            >
+            <Button type="button" variant="ghost" size="sm" onClick={() => deleteTestimonial.mutate(Number(t.id))}>
               <Trash2 className="size-4 text-destructive" />
             </Button>
           </div>
@@ -84,29 +82,25 @@ export function ProductTestimonialsSection({ ulid }: { ulid: string }) {
               <Input {...form.register('avatar_url')} placeholder="https://..." />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium">Rating (1-5)</label>
+              <label className="text-sm font-medium">Rating (1–5)</label>
               <Input type="number" min={1} max={5} step={0.5} {...form.register('rating')} />
             </div>
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Review (Arabic) *</label>
-            <textarea
-              {...form.register('translations.ar.body')}
-              dir="rtl"
-              rows={3}
-              required
-              className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y"
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Review (English)</label>
-            <textarea
-              {...form.register('translations.en.body')}
-              dir="ltr"
-              rows={3}
-              className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y"
-            />
-          </div>
+          <LangTabs
+            label="Review text"
+            ar={
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium">Review (AR) *</label>
+                <textarea {...form.register('translations.ar.body')} dir="rtl" rows={3} required className={textAreaClass} />
+              </div>
+            }
+            en={
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium">Review (EN)</label>
+                <textarea {...form.register('translations.en.body')} dir="ltr" rows={3} className={textAreaClass} />
+              </div>
+            }
+          />
           <div className="flex gap-2">
             <Button type="submit" size="sm" disabled={addTestimonial.isPending}>
               {addTestimonial.isPending ? '...' : 'Add testimonial'}
