@@ -64,3 +64,52 @@ export const UpdateProductSchema = CreateProductSchema.omit({ brand_id: true }).
   status: z.number().int().optional(),
 })
 export type UpdateProductInput = z.infer<typeof UpdateProductSchema>
+
+// ── Sub-resource write shapes ───────────────────────────────────────────────
+export interface ProductDescriptionInput {
+  body_html?: string
+  translations?: { ar?: { body_html?: string }; en?: { body_html?: string } }
+}
+
+export interface ProductSeoInput {
+  meta_title?: string
+  meta_description?: string
+  og_image_url?: string
+  translations?: {
+    ar?: { meta_title?: string; meta_description?: string }
+    en?: { meta_title?: string; meta_description?: string }
+  }
+}
+
+export interface ProductDeliveryInput {
+  delivery_method?: number
+  download_limit?: number
+  access_expiry_days?: number
+  stream_url?: string
+  redirect_url?: string
+  requires_shipping?: boolean
+}
+
+export interface ProductAssetInput {
+  [key: string]: unknown
+}
+
+export interface ProductTestimonialInput {
+  author_name?: string
+  name?: string
+  body?: string
+  rating?: number
+  avatar_url?: string
+  role?: string
+  sort_order?: number
+  translations?: Record<string, unknown>
+  [key: string]: unknown
+}
+
+export interface ProductFaqInput {
+  question?: string
+  answer?: string
+  sort_order?: number
+  translations?: Record<string, unknown>
+  [key: string]: unknown
+}

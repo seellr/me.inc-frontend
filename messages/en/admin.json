@@ -15,7 +15,7 @@
     "automation": "Automation",
     "ai-tools": "AI Tools",
     "quizzes": "Quizzes",
-    "vat": "VAT Config",
+    "vat": "VAT",
     "media": "Media Library",
     "localization": "Localization",
     "group": {
@@ -56,6 +56,7 @@
     "new": "New Product",
     "empty": "No products yet",
     "table": {
+      "search": "Search products…",
       "name": "Name",
       "sku": "SKU",
       "type": "Type",
@@ -81,6 +82,8 @@
       "crmScore": "CRM score on purchase",
       "sortOrder": "Sort order",
       "status": "Status",
+      "deliveryMethod": "Delivery method",
+      "vatRule": "VAT rule",
       "couponEligible": "Coupon eligible",
       "featured": "Featured",
       "save": "Save",
@@ -106,6 +109,7 @@
     "title": "Orders",
     "empty": "No orders yet",
     "table": {
+      "search": "Search orders…",
       "invoice": "Invoice",
       "status": "Status",
       "total": "Total",

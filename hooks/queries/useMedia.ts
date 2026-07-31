@@ -18,8 +18,7 @@ export interface MediaItem {
   created_at: string
 }
 
-interface MediaListResponse {
-  data: MediaItem[]
+interface ApiMeta {
   per_page: number
   next_cursor: string | null
   has_more: boolean
@@ -38,9 +37,17 @@ export function useMediaList(params?: { folder?: string; search?: string; type?:
   return useQuery({
     queryKey: mediaQueryKey(params?.folder, params?.search, params?.type),
     queryFn: async () => {
-      const result = await adminFetchClient<MediaListResponse>(`/media${queryString}`)
+      // Backend returns { success: true, data: [...items], meta: { per_page, next_cursor, has_more } }
+      // adminFetchClient maps: result.data = json.data (the items array), result.meta = json.meta
+      const result = await adminFetchClient<MediaItem[]>(`/media${queryString}`)
       if (!result.ok) throw new Error(result.message)
-      return result.data
+      const meta = result.meta as ApiMeta | undefined
+      return {
+        items: result.data ?? [],
+        per_page: meta?.per_page ?? 20,
+        next_cursor: meta?.next_cursor ?? null,
+        has_more: meta?.has_more ?? false,
+      }
     },
     staleTime: 30_000,
   })
@@ -52,7 +59,7 @@ export function useMediaFolders() {
     queryFn: async () => {
       const result = await adminFetchClient<string[]>('/media/folders')
       if (!result.ok) throw new Error(result.message)
-      return result.data
+      return result.data ?? []
     },
     staleTime: 60_000,
   })

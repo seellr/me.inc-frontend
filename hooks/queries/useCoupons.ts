@@ -6,6 +6,18 @@ import type { Coupon, CreateCouponInput } from '@/types/dto/coupon.dto'
 export const couponsQueryKey = (cursor?: string) => ['admin', 'coupons', cursor ?? null] as const
 export const couponQueryKey = (ulid: string) => ['admin', 'coupons', ulid] as const
 
+export function useCouponQuery(ulid: string) {
+  return useQuery({
+    queryKey: couponQueryKey(ulid),
+    queryFn: async () => {
+      const result = await adminFetchClient<Coupon>(`/coupons/${ulid}`)
+      if (!result.ok) throw new Error(result.message)
+      return result.data
+    },
+    enabled: ulid !== 'new',
+  })
+}
+
 export function useCouponsQuery(cursor?: string) {
   return useQuery({
     queryKey: couponsQueryKey(cursor),

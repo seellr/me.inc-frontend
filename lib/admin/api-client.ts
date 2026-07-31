@@ -10,6 +10,9 @@ export async function adminFetchClient<T>(path: string, init?: RequestInit): Pro
     // client-side source of truth instead of threading locale through
     // every hook/component that calls this function.
     const locale = typeof document !== 'undefined' ? document.documentElement.lang : 'en'
+    const brandId = typeof window !== 'undefined'
+      ? (localStorage.getItem('admin_active_brand_id') ?? '1')
+      : '1'
 
     const res = await fetch(`/api/admin${path}`, {
       ...init,
@@ -17,6 +20,7 @@ export async function adminFetchClient<T>(path: string, init?: RequestInit): Pro
         'Content-Type': 'application/json',
         Accept: 'application/json',
         'x-locale': locale,
+        'x-brand-id': brandId,
         ...(init?.headers as Record<string, string> | undefined),
       },
     })

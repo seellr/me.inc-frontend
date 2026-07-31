@@ -16,7 +16,7 @@ export function makeCreateProductSchema(t: T) {
     access_expiry_days: z.number().int().min(1).max(3650).optional(),
     currency: z.string().length(3, t('products.validation.currencyInvalid')),
     vat_rule: z.number().int(),
-    sku: z.string().max(80).regex(/^[A-Za-z0-9\-_]+$/, t('products.validation.skuInvalid')),
+    sku: z.string().max(80).regex(/^[A-Za-z0-9\-_]*$/, t('products.validation.skuInvalid')).nullable().optional(),
     coupon_eligible: z.boolean(),
     featured: z.boolean(),
     crm_score_on_purchase: z.number().int().min(0).max(10000).optional(),
