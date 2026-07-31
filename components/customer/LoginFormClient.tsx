@@ -1,22 +1,24 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { sileo } from 'sileo'
 import { Eye, EyeOff } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { CustomerLoginRequestSchema, type CustomerLoginRequest } from '@/types/dto/customer-auth.dto'
 import { useCart } from '@/lib/cart/context'
+import { sileo } from 'sileo'
 
 export function LoginFormClient({ locale }: { locale: string }) {
   const t = useTranslations('auth')
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { refresh: refreshCart, setAuthenticated } = useCart()
   const [isPending, setIsPending] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -37,12 +39,13 @@ export function LoginFormClient({ locale }: { locale: string }) {
       })
       const json = await res.json()
       if (!res.ok || !json.success) {
-        sileo.error({ title: t('login.error') })
+        toast.error(json.message ?? t('login.error'))
         return
       }
       setAuthenticated(true)
       await refreshCart()
-      router.push(`/${locale}`)
+      const redirect = searchParams.get('redirect')
+      router.push(redirect ? `/${locale}/${redirect}` : `/${locale}`)
     } finally {
       setIsPending(false)
     }
@@ -82,7 +85,7 @@ export function LoginFormClient({ locale }: { locale: string }) {
         </label>
         <button
           type="button"
-          onClick={() => sileo.info({ title: t('login.forgotPasswordComingSoon') })}
+          onClick={() => toast.info(t('login.forgotPasswordComingSoon'))}
           className="text-primary underline-offset-2 hover:underline"
         >
           {t('login.forgotPassword')}

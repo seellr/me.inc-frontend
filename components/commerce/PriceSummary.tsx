@@ -9,10 +9,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { formatCurrency } from '@/lib/currency'
 
-const VALID_CODES: Record<string, number> = {
-  SAVE10: 0.10,
-  SAVE20: 0.20,
-  WELCOME: 0.15,
+interface CouponValidation {
+  code: string
+  type: number
+  value: number
 }
 
 export function PriceSummary({
@@ -22,6 +22,7 @@ export function PriceSummary({
   onCta,
   ctaHref,
   disabled,
+  onCouponChange,
 }: {
   subtotal: number
   shipping: number
@@ -29,34 +30,61 @@ export function PriceSummary({
   onCta?: () => void
   ctaHref?: string
   disabled?: boolean
+  onCouponChange?: (coupon: { code: string; discount: number } | null) => void
 }) {
   const locale = useLocale()
   const t = useTranslations('cart')
 
   const [code, setCode] = useState('')
-  const [applied, setApplied] = useState<{ code: string; rate: number } | null>(null)
+  const [applied, setApplied] = useState<{ code: string; discount: number; label: string } | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isApplying, setIsApplying] = useState(false)
 
-  const discount = applied ? Math.round(subtotal * applied.rate) : 0
+  const discount = applied?.discount ?? 0
   const total = subtotal + shipping - discount
 
-  function applyCode() {
+  async function applyCode() {
     const upper = code.trim().toUpperCase()
     if (!upper) return
-    const rate = VALID_CODES[upper]
-    if (rate) {
-      setApplied({ code: upper, rate })
-      setError(null)
+    setIsApplying(true)
+    setError(null)
+    try {
+      const locale = typeof document !== 'undefined' ? document.documentElement.lang : 'en'
+      const res = await fetch(`/api/public/coupons/${encodeURIComponent(upper)}/validate`, {
+        headers: { 'x-locale': locale },
+      })
+      const json = await res.json()
+      if (!res.ok || !json.success) {
+        setError(json.message ?? t('invalidPromo'))
+        setApplied(null)
+        onCouponChange?.(null)
+        return
+      }
+      const coupon: CouponValidation = json.data
+      let discountAmt = 0
+      let label = ''
+      if (coupon.type === 1) {
+        discountAmt = Math.min(coupon.value, subtotal)
+        label = `${formatCurrency(coupon.value, locale)} off`
+      } else {
+        discountAmt = Math.round(subtotal * (coupon.value / 100))
+        label = `${coupon.value}% off`
+      }
+      const next = { code: upper, discount: discountAmt, label }
+      setApplied(next)
       setCode('')
-    } else {
+      onCouponChange?.({ code: upper, discount: discountAmt })
+    } catch {
       setError(t('invalidPromo'))
-      setApplied(null)
+    } finally {
+      setIsApplying(false)
     }
   }
 
   function removeCode() {
     setApplied(null)
     setError(null)
+    onCouponChange?.(null)
   }
 
   return (
@@ -85,7 +113,7 @@ export function PriceSummary({
       {applied ? (
         <div className="flex items-center justify-between rounded-lg bg-green-500/15 px-3 py-2 text-sm">
           <span className="flex items-center gap-1.5 text-green-400 font-medium">
-            <Tag className="size-3.5" />{applied.code} ({Math.round(applied.rate * 100)}% off)
+            <Tag className="size-3.5" />{applied.code} ({applied.label})
           </span>
           <button type="button" onClick={removeCode} className="text-background/50 hover:text-background">
             <X className="size-4" />
@@ -101,8 +129,8 @@ export function PriceSummary({
               onKeyDown={(e) => e.key === 'Enter' && applyCode()}
               className="border-background/25 bg-background/10 text-background placeholder:text-background/50"
             />
-            <Button variant="secondary" size="sm" className="shrink-0" onClick={applyCode}>
-              {t('apply')}
+            <Button variant="secondary" size="sm" className="shrink-0" onClick={applyCode} disabled={isApplying}>
+              {isApplying ? '...' : t('apply')}
             </Button>
           </div>
           {error && <p className="text-xs text-red-400">{error}</p>}

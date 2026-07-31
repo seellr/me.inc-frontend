@@ -17,7 +17,7 @@ export function Navbar() {
   const t = useTranslations('nav')
   const [mobileOpen, setMobileOpen] = useState(false)
   const scrolled = useScrolled()
-  const { count } = useCart()
+  const { count, isAuthenticated } = useCart()
 
   return (
     <>
@@ -65,9 +65,15 @@ export function Navbar() {
 
             <LocaleSwitcher />
 
-            <Button nativeButton={false} render={<Link href="/login" />} className="hidden sm:inline-flex">
-              {t('account')}
-            </Button>
+            {isAuthenticated ? (
+              <Button nativeButton={false} render={<Link href="/orders" />} className="hidden sm:inline-flex">
+                {t('myAccount')}
+              </Button>
+            ) : (
+              <Button nativeButton={false} render={<Link href="/login" />} className="hidden sm:inline-flex">
+                {t('account')}
+              </Button>
+            )}
 
             <button
               type="button"

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
+import { Toaster } from '@/components/ui/sonner'
 import { RegisterFormClient } from '@/components/customer/RegisterFormClient'
 
 export default async function CustomerRegisterPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -8,6 +9,7 @@ export default async function CustomerRegisterPage({ params }: { params: Promise
 
   return (
     <div className="flex min-h-svh">
+      <Toaster richColors position="top-right" />
       <div className="flex w-full flex-col justify-between p-8 lg:w-[48%] lg:p-16">
         <Link href={`/${locale}`} className="text-lg font-semibold">
           me.inc
