@@ -16,11 +16,12 @@ export function makeCreateProductSchema(t: T) {
     access_expiry_days: z.number().int().min(1).max(3650).optional(),
     currency: z.string().length(3, t('products.validation.currencyInvalid')),
     vat_rule: z.number().int(),
-    sku: z.string().max(80).regex(/^[A-Za-z0-9\-_]+$/, t('products.validation.skuInvalid')),
+    sku: z.string().max(80).regex(/^[A-Za-z0-9\-_]*$/, t('products.validation.skuInvalid')).nullable().optional(),
     coupon_eligible: z.boolean(),
     featured: z.boolean(),
     crm_score_on_purchase: z.number().int().min(0).max(10000).optional(),
     sort_order: z.number().int().min(0).optional(),
+    hero_image_url: z.string().url().nullable().optional(),
     translations: z.object({
       ar: z.object({
         name: z.string().min(1, t('products.validation.nameRequired')).max(200, t('products.validation.nameTooLong')),
@@ -41,3 +42,4 @@ export function makeUpdateProductSchema(t: T) {
 }
 
 export type ProductFormValues = z.infer<ReturnType<typeof makeCreateProductSchema>>
+export type ProductUpdateFormValues = z.infer<ReturnType<typeof makeUpdateProductSchema>>

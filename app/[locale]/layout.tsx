@@ -47,7 +47,9 @@ export default async function LocaleLayout({
           </NextIntlClientProvider>
         </DirectionProvider>
       </body>
-      <Toaster position="top-right" />
+      <Toaster position="top-right" offset={25} options={{
+        duration: 3000,
+      }} />
     </html>
   )
 }

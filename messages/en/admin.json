@@ -5,7 +5,39 @@
     "orders": "Orders",
     "coupons": "Coupons",
     "profile": "Profile",
-    "logout": "Log out"
+    "logout": "Log out",
+    "analytics": "Analytics",
+    "crm": "CRM",
+    "brand": "Brand Config",
+    "categories": "Categories",
+    "funnels": "Funnels",
+    "email": "Email",
+    "automation": "Automation",
+    "ai-tools": "AI Tools",
+    "quizzes": "Quizzes",
+    "vat": "VAT",
+    "media": "Media Library",
+    "localization": "Localization",
+    "group": {
+      "store": "Store",
+      "growth": "Growth",
+      "funnels": "Funnels & Email",
+      "tools": "Tools",
+      "content": "Content"
+    }
+  },
+  "tab": {
+    "basic": "Basic",
+    "description": "Description",
+    "seo": "SEO",
+    "delivery": "Delivery",
+    "assets": "Assets",
+    "testimonials": "Testimonials",
+    "faqs": "FAQs",
+    "funnel": "Funnel"
+  },
+  "crm": {
+    "searchPlaceholder": "Search by name or email..."
   },
   "login": {
     "title": "Welcome back",
@@ -24,6 +56,7 @@
     "new": "New Product",
     "empty": "No products yet",
     "table": {
+      "search": "Search products…",
       "name": "Name",
       "sku": "SKU",
       "type": "Type",
@@ -49,6 +82,8 @@
       "crmScore": "CRM score on purchase",
       "sortOrder": "Sort order",
       "status": "Status",
+      "deliveryMethod": "Delivery method",
+      "vatRule": "VAT rule",
       "couponEligible": "Coupon eligible",
       "featured": "Featured",
       "save": "Save",
@@ -74,6 +109,7 @@
     "title": "Orders",
     "empty": "No orders yet",
     "table": {
+      "search": "Search orders…",
       "invoice": "Invoice",
       "status": "Status",
       "total": "Total",

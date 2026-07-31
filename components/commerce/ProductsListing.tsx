@@ -58,7 +58,7 @@ export function ProductsListing({
       {/* Category pills */}
       <div className="pb-4 border-b border-border">
         <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('filters.category')}</p>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col gap-2">
           <button
             type="button"
             onClick={() => setActiveCategories([])}
@@ -169,7 +169,7 @@ export function ProductsListing({
               <p>{t('emptyState')}</p>
             </div>
           ) : (
-            <StaggerGrid className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-3">
+            <StaggerGrid className="grid grid-cols-2 gap-5 sm:grid-cols-2 md:grid-cols-3">
               {filtered.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

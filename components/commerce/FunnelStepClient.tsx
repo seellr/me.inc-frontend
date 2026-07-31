@@ -104,12 +104,20 @@ export function FunnelStepClient({ orderUlid, initialStep }: { orderUlid: string
       >
         <Card variant="static" className="mx-auto grid max-w-3xl overflow-hidden p-0 sm:grid-cols-2">
           <div className="relative aspect-square bg-muted sm:aspect-auto">
-            <Image
-              src={step.product?.hero_image_url ?? '/images/placeholder-product.png'}
-              alt={step.product?.name ?? ''}
-              fill
-              className="object-contain p-8"
-            />
+            {step.product?.hero_image_url ? (
+              <Image
+                src={step.product.hero_image_url}
+                alt={step.product.name ?? ''}
+                fill
+                className="object-contain p-8"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 via-muted to-primary/5">
+                <span className="font-display text-6xl font-bold text-primary/20 select-none">
+                  {(step.product?.name ?? 'P').slice(0, 2).toUpperCase()}
+                </span>
+              </div>
+            )}
             {isOto && (
               <span className="absolute top-4 start-4 flex items-center gap-1 rounded-full bg-amber px-3 py-1 text-xs font-semibold text-amber-foreground">
                 <Sparkles className="size-3.5" />

@@ -37,9 +37,16 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null)
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
+export function CartProvider({
+  children,
+  initialAuthenticated = false,
+}: {
+  children: React.ReactNode
+  initialAuthenticated?: boolean
+}) {
   const [items, setItems] = useState<CartItem[]>([])
   const [hydrated, setHydrated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(initialAuthenticated)
 
   useEffect(() => {
     setItems(loadFromStorage())
@@ -91,7 +98,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const refresh = useCallback(async () => {}, [])
-  const setAuthenticated = useCallback((_val: boolean) => {}, [])
+
+  const setAuthenticated = useCallback((val: boolean) => {
+    setIsAuthenticated(val)
+  }, [])
 
   const value = useMemo<CartContextValue>(() => {
     const count = items.reduce((sum, line) => sum + line.quantity, 0)
@@ -101,7 +111,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       count,
       subtotal,
       isLoading: !hydrated,
-      isAuthenticated: true,
+      isAuthenticated,
       addItem,
       removeItem,
       updateQuantity,
@@ -109,7 +119,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       refresh,
       setAuthenticated,
     }
-  }, [items, hydrated, addItem, removeItem, updateQuantity, clear, refresh, setAuthenticated])
+  }, [items, hydrated, isAuthenticated, addItem, removeItem, updateQuantity, clear, refresh, setAuthenticated])
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }

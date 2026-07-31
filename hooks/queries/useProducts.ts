@@ -1,10 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { adminFetchClient } from '@/lib/admin/api-client'
 import type { ApiMeta, ApiResult } from '@/lib/admin/api-server'
-import type { CreateProductInput, Product, UpdateProductInput } from '@/types/dto/product.dto'
+import type {
+  CreateProductInput,
+  Product,
+  UpdateProductInput,
+  ProductDescriptionInput,
+  ProductSeoInput,
+  ProductDeliveryInput,
+  ProductAssetInput,
+  ProductTestimonialInput,
+  ProductFaqInput,
+} from '@/types/dto/product.dto'
 
 export const productsQueryKey = (cursor?: string) => ['admin', 'products', cursor ?? null] as const
-export const productQueryKey = (ulid: string) => ['admin', 'products', ulid] as const
+export const productQueryKey = (ulid: string) => ['admin', 'product', ulid] as const
 
 
 async function unwrap<T>(pending: Promise<ApiResult<T>>): Promise<T> {
@@ -70,21 +80,21 @@ export function useDeleteProduct() {
 
 export function useUpsertProductDescription(ulid: string) {
   return useMutation({
-    mutationFn: (input: Record<string, unknown>) =>
+    mutationFn: (input: ProductDescriptionInput) =>
       adminFetchClient(`/products/${ulid}/description`, { method: 'PUT', body: JSON.stringify(input) }),
   })
 }
 
 export function useUpsertProductSeo(ulid: string) {
   return useMutation({
-    mutationFn: (input: Record<string, unknown>) =>
+    mutationFn: (input: ProductSeoInput) =>
       adminFetchClient(`/products/${ulid}/seo`, { method: 'PUT', body: JSON.stringify(input) }),
   })
 }
 
 export function useUpsertProductDelivery(ulid: string) {
   return useMutation({
-    mutationFn: (input: Record<string, unknown>) =>
+    mutationFn: (input: ProductDeliveryInput) =>
       adminFetchClient(`/products/${ulid}/delivery`, { method: 'PUT', body: JSON.stringify(input) }),
   })
 }
@@ -124,7 +134,7 @@ export function useProductAssets(ulid: string) {
 export function useAddProductAsset(ulid: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (input: Record<string, unknown>) =>
+    mutationFn: (input: ProductAssetInput) =>
       adminFetchClient(`/products/${ulid}/assets`, { method: 'POST', body: JSON.stringify(input) }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'products', ulid, 'assets'] }),
   })
@@ -150,7 +160,7 @@ export function useProductTestimonials(ulid: string) {
 export function useAddProductTestimonial(ulid: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (input: Record<string, unknown>) =>
+    mutationFn: (input: ProductTestimonialInput) =>
       adminFetchClient(`/products/${ulid}/testimonials`, { method: 'POST', body: JSON.stringify(input) }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'products', ulid, 'testimonials'] }),
   })
@@ -176,7 +186,7 @@ export function useProductFaqs(ulid: string) {
 export function useAddProductFaq(ulid: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (input: Record<string, unknown>) =>
+    mutationFn: (input: ProductFaqInput) =>
       adminFetchClient(`/products/${ulid}/faqs`, { method: 'POST', body: JSON.stringify(input) }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'products', ulid, 'faqs'] }),
   })

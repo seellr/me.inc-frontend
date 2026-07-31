@@ -7,11 +7,7 @@ import { storeFetchServer } from '@/lib/store/api-server'
 import { productToStoreProduct } from '@/lib/store/adapters'
 import type { Product } from '@/types/dto/product.dto'
 
-export const dynamic = 'force-dynamic'
-
-// generateStaticParams removed: slugs previously came from FALLBACK_PRODUCTS
-// mock data. Real slugs live in the backend; this page now renders
-// dynamically (ISR via `revalidate` still applies per-request).
+export const revalidate = 600
 
 export default async function ProductPage({
   params,

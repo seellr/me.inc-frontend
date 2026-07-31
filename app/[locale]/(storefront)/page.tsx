@@ -16,7 +16,7 @@ import { productToStoreProduct } from "@/lib/store/adapters";
 import { setRequestLocale } from "next-intl/server";
 import type { Product } from "@/types/dto/product.dto";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 600
 
 export default async function Home({
   params,

@@ -8,7 +8,7 @@ import { storeFetchServer } from '@/lib/store/api-server'
 import { productToStoreProduct } from '@/lib/store/adapters'
 import type { Product } from '@/types/dto/product.dto'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 export default async function ProductsPage({
   params,
