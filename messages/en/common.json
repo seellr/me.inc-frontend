@@ -1,0 +1,10 @@
+{
+  "language": "English",
+  "switchLanguage": "العربية",
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has been moved.",
+    "home": "Go home",
+    "shop": "Browse products"
+  }
+}

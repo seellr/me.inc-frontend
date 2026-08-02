@@ -1,26 +1,493 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   DESIGN SYSTEM — Modern E-commerce
+   ------------------------------------------------------------
+   COLOR HIERARCHY (strongest → quietest):
+   1. --primary            → main CTAs, links, active states (green)
+   2. --surface-contrast   → high-attention sections: promo banners,
+                             newsletter, seasonal campaigns (deep green)
+   3. --surface-tint       → light-green sections (featured, benefits)
+      --surface-tint-cool  → light-blue sections (alternate rhythm)
+   4. --amber              → sale badges, discounts, star ratings
+   5. --foreground         → headings (near-black)
+      --paragraph          → body copy (softened ink)
+      --muted-foreground   → captions, meta, helper text
+   Rule of thumb: one contrast section + max two tinted sections
+   per page. Everything else sits on the cream background.
+   ============================================================ */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-paragraph: var(--paragraph);
+  --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-body);
+  --font-display: var(--font-body);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-amber: var(--amber);
+  --color-amber-foreground: var(--amber-foreground);
+
+  /* Section surfaces (usable as bg-surface-tint, bg-surface-contrast…) */
+  --color-surface-tint: var(--surface-tint);
+  --color-surface-tint-cool: var(--surface-tint-cool);
+  --color-surface-contrast: var(--surface-contrast);
+  --color-surface-contrast-foreground: var(--surface-contrast-foreground);
+  --color-surface-elevated: var(--surface-elevated);
+
+  /* Commerce state colors */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-sale: var(--sale);
+  --color-sale-foreground: var(--sale-foreground);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* ----------------------------------------------------------
+     LAYOUT SPACING (p-gutter, py-section, gap-stack-md…)
+     Sections breathe on an 8px-based rhythm; tinted/contrast
+     sections get the larger scale so they read as "moments".
+     ---------------------------------------------------------- */
+  --spacing-gutter: 1.25rem;
+  /* mobile page padding */
+  --spacing-gutter-lg: 2rem;
+  /* desktop page padding */
+  --spacing-section-sm: 3.5rem;
+  /* compact sections, mobile default */
+  --spacing-section: 6rem;
+  /* standard section rhythm */
+  --spacing-section-lg: 8rem;
+  /* hero / contrast moments */
+  --spacing-stack-xs: 0.5rem;
+  /* label ↔ input, icon ↔ text */
+  --spacing-stack-sm: 1rem;
+  /* heading ↔ paragraph */
+  --spacing-stack-md: 1.5rem;
+  /* paragraph ↔ CTA */
+  --spacing-stack-lg: 2.5rem;
+  /* section header ↔ content grid */
+  --spacing-stack-xl: 4rem;
+  /* between content blocks */
+  --spacing-card: 1.5rem;
+  /* internal card padding */
+  --spacing-card-lg: 2rem;
+  /* feature / promo card padding */
+
+  /* ----------------------------------------------------------
+     TYPOGRAPHY SCALE (responsive via clamp)
+     Headings: near-black, tight tracking.
+     Body: --paragraph color, relaxed line-height for reading.
+     ---------------------------------------------------------- */
+  --text-display: clamp(2.75rem, 2rem + 3.2vw, 4.25rem);
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.025em;
+  --text-h1: clamp(2.25rem, 1.8rem + 2vw, 3.25rem);
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h2: clamp(1.75rem, 1.5rem + 1.2vw, 2.5rem);
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h3: clamp(1.5rem, 1.35rem + 0.7vw, 1.875rem);
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h4: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  --text-h4--line-height: 1.35;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.7;
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.5;
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1.4;
+  --text-price: 1.375rem;
+  --text-price--line-height: 1.2;
+
+  /* ----------------------------------------------------------
+     MOTION (custom easing curves, ~300-450ms durations)
+     ---------------------------------------------------------- */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-fast-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ----------------------------------------------------------
+     SHADOW SCALE
+     "pop" is the offset shadow used on primary button hover.
+     ---------------------------------------------------------- */
+  --shadow-ambient: 0 1px 2px oklch(0 0 0 / 0.04), 0 4px 12px oklch(0 0 0 / 0.06);
+  --shadow-pop: 0 3px 0 0 var(--amber);
+  --shadow-pop-active: 0 3px 0 0 var(--amber);
+  --shadow-pop-secondary: 0 3px 0 0 var(--primary);
+  --shadow-pop-secondary-active: 0 3px 0 0 var(--primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --font-body: var(--font-thmanyah);
+
+  /* --- Neutrals: creamy white base, near-black ink --- */
+  --background: oklch(0.981 0.009 92);
+  /* creamy white */
+  --foreground: oklch(0.17 0.012 160);
+  /* near-black, green-leaning */
+  --paragraph: oklch(0.4 0.014 160);
+  /* softened ink for body copy */
+  --card: oklch(0.998 0.003 92);
+  /* warm white, lifts off cream */
+  --card-foreground: oklch(0.17 0.012 160);
+  --popover: oklch(0.998 0.003 92);
+  --popover-foreground: oklch(0.17 0.012 160);
+  --surface-elevated: oklch(1 0 0);
+  /* pure white for modals/imagery */
+
+  /* --- Brand: fresh green primary --- */
+  --primary: oklch(0.56 0.115 158);
+  /* confident green — CTAs, links */
+  --primary-foreground: oklch(0.985 0.008 150);
+  --secondary: oklch(0.94 0.035 152);
+  /* light-green chip / soft button */
+  --secondary-foreground: oklch(0.3 0.07 158);
+  --accent: oklch(0.93 0.03 220);
+  /* light-blue hover / selected */
+  --accent-foreground: oklch(0.28 0.06 235);
+
+  /* --- Section surfaces (attention hierarchy) --- */
+  --surface-tint: oklch(0.952 0.036 150);
+  /* light green — featured sections */
+  --surface-tint-cool: oklch(0.955 0.024 225);
+  /* light blue — alternate sections */
+  --surface-contrast: oklch(0.3 0.062 160);
+  /* deep green — promo/newsletter */
+  --surface-contrast-foreground: oklch(0.975 0.012 120);
+
+  /* --- Commerce accents --- */
+  --amber: oklch(0.78 0.16 75);
+  /* ratings, highlights */
+  --amber-foreground: oklch(0.2 0.02 75);
+  --sale: oklch(0.62 0.21 32);
+  /* discount badges, urgency */
+  --sale-foreground: oklch(0.99 0.005 32);
+  --success: oklch(0.6 0.13 155);
+  /* in stock, order confirmed */
+  --success-foreground: oklch(0.985 0.008 150);
+  --destructive: oklch(0.577 0.245 27.325);
+  /* errors, remove from cart */
+
+  /* --- Structure --- */
+  --muted: oklch(0.955 0.008 92);
+  --muted-foreground: oklch(0.5 0.012 160);
+  --border: oklch(0.9 0.012 110);
+  --input: oklch(0.9 0.012 110);
+  --ring: oklch(0.56 0.115 158);
+  --radius: 0.625rem;
+
+  --chart-1: oklch(0.56 0.115 158);
+  --chart-2: oklch(0.62 0.1 225);
+  --chart-3: oklch(0.78 0.16 75);
+  --chart-4: oklch(0.45 0.08 160);
+  --chart-5: oklch(0.7 0.06 200);
+
+  --sidebar: oklch(0.972 0.01 92);
+  --sidebar-foreground: oklch(0.17 0.012 160);
+  --sidebar-primary: oklch(0.56 0.115 158);
+  --sidebar-primary-foreground: oklch(0.985 0.008 150);
+  --sidebar-accent: oklch(0.94 0.035 152);
+  --sidebar-accent-foreground: oklch(0.3 0.07 158);
+  --sidebar-border: oklch(0.9 0.012 110);
+}
+
+html[lang="ar"] {
+  --font-body: var(--font-thmanyah);
+}
+
+html[lang="en"] {
+  --font-body: var(--font-chillax) !important;
+}
+
+
+.dark {
+  --background: oklch(0.165 0.014 165);
+  --foreground: oklch(0.975 0.008 120);
+  --paragraph: oklch(0.78 0.012 150);
+  --card: oklch(0.21 0.016 165);
+  --card-foreground: oklch(0.975 0.008 120);
+  --popover: oklch(0.21 0.016 165);
+  --popover-foreground: oklch(0.975 0.008 120);
+  --surface-elevated: oklch(0.24 0.016 165);
+
+  --primary: oklch(0.72 0.13 158);
+  --primary-foreground: oklch(0.2 0.05 160);
+  --secondary: oklch(0.28 0.045 158);
+  --secondary-foreground: oklch(0.92 0.04 150);
+  --accent: oklch(0.28 0.04 225);
+  --accent-foreground: oklch(0.92 0.03 220);
+
+  --surface-tint: oklch(0.23 0.035 158);
+  --surface-tint-cool: oklch(0.23 0.03 230);
+  --surface-contrast: oklch(0.26 0.055 160);
+  --surface-contrast-foreground: oklch(0.975 0.012 120);
+
+  --amber: oklch(0.78 0.16 75);
+  --amber-foreground: oklch(0.2 0.02 75);
+  --sale: oklch(0.68 0.19 32);
+  --sale-foreground: oklch(0.16 0.02 32);
+  --success: oklch(0.72 0.13 155);
+  --success-foreground: oklch(0.2 0.05 160);
+  --destructive: oklch(0.704 0.191 22.216);
+
+  --muted: oklch(0.24 0.012 165);
+  --muted-foreground: oklch(0.72 0.01 150);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.72 0.13 158);
+
+  --chart-1: oklch(0.72 0.13 158);
+  --chart-2: oklch(0.68 0.11 225);
+  --chart-3: oklch(0.78 0.16 75);
+  --chart-4: oklch(0.55 0.09 160);
+  --chart-5: oklch(0.75 0.07 200);
+
+  --sidebar: oklch(0.19 0.015 165);
+  --sidebar-foreground: oklch(0.975 0.008 120);
+  --sidebar-primary: oklch(0.72 0.13 158);
+  --sidebar-primary-foreground: oklch(0.2 0.05 160);
+  --sidebar-accent: oklch(0.26 0.03 158);
+  --sidebar-accent-foreground: oklch(0.975 0.008 120);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.72 0.13 158);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+
+  /* --- Layout --- */
+  .section-container {
+    @apply mx-auto w-full max-w-7xl px-gutter lg:px-gutter-lg;
+  }
+
+  .section-y {
+    padding-top: var(--spacing-section-sm);
+    padding-bottom: var(--spacing-section-sm);
+  }
+
+  .section-y-lg {
+    padding-top: var(--spacing-section);
+    padding-bottom: var(--spacing-section);
+  }
+
+  /* --- Section surfaces (attention layers) --- */
+  /* Default: nothing — sections sit on the cream background. */
+
+  /* Layer 3: soft emphasis, use for featured products / benefits */
+  .section-tint {
+    @apply bg-surface-tint;
+  }
+
+  /* Layer 3 (cool): alternate rhythm, e.g. testimonials / categories */
+  .section-tint-cool {
+    @apply bg-surface-tint-cool;
+  }
+
+  /* Layer 2: maximum attention — one per page (promo, newsletter, CTA) */
+  .section-contrast {
+    @apply bg-surface-contrast text-surface-contrast-foreground;
+  }
+
+  .section-contrast .body,
+  .section-contrast .body-lg,
+  .section-contrast .caption {
+    color: color-mix(in oklch, var(--surface-contrast-foreground) 82%, transparent);
+  }
+
+  /* --- Typography roles --- */
+  .display {
+    @apply text-display font-heading font-semibold text-foreground;
+  }
+
+  .heading-1 {
+    @apply text-h1 font-heading font-semibold text-foreground;
+  }
+
+  .heading-2 {
+    @apply text-h2 font-heading font-semibold text-foreground;
+  }
+
+  .heading-3 {
+    @apply text-h3 font-heading font-semibold text-foreground;
+  }
+
+  .heading-4 {
+    @apply text-h4 font-heading font-medium text-foreground;
+  }
+
+  .body-lg {
+    @apply text-body-lg text-paragraph;
+  }
+
+  .body {
+    @apply text-body text-paragraph;
+  }
+
+  .caption {
+    @apply text-caption text-muted-foreground;
+  }
+
+  .eyebrow {
+    @apply text-micro font-medium tracking-wide uppercase text-primary;
+  }
+
+  /* --- Commerce primitives --- */
+  .price {
+    @apply text-price font-semibold text-foreground tabular-nums;
+  }
+
+  .price-old {
+    @apply text-caption text-muted-foreground line-through tabular-nums;
+  }
+
+  .price-sale {
+    @apply text-price font-semibold text-sale tabular-nums;
+  }
+
+  .badge-sale {
+    @apply inline-flex items-center rounded-md bg-sale px-2 py-0.5 text-micro font-semibold text-sale-foreground;
+  }
+
+  .badge-new {
+    @apply inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-micro font-semibold text-secondary-foreground;
+  }
+
+  .badge-stock {
+    @apply inline-flex items-center gap-1 text-micro font-medium text-success;
+  }
+
+  .product-card {
+    @apply rounded-xl bg-card p-card shadow-sm ring-1 ring-border transition-shadow hover:shadow-md;
+  }
+
+  /* py-section* utilities are registered via @utility below — do not redefine here */
+
+  /* --- Footer signature --- */
+  .footer-aurora {
+    background:
+      radial-gradient(48% 55% at 82% 70%, color-mix(in oklch, var(--primary) 22%, transparent), transparent 70%);
+    filter: blur(70px);
+    animation: footer-aurora-drift 22s ease-in-out infinite;
+  }
+
+  .footer-wordmark-clip {
+    height: clamp(4.5rem, 11vw, 13rem);
+  }
+
+  .footer-wordmark {
+    font-size: clamp(6rem, 19vw, 22rem);
+  }
+}
+
+/* ----------------------------------------------------------
+   SECTION PADDING UTILITIES
+   Registered via @utility so Tailwind v4 generates responsive
+   variants (lg:py-section, !py-section, etc.) properly.
+   ---------------------------------------------------------- */
+@utility py-section-sm {
+  padding-top: var(--spacing-section-sm);
+  padding-bottom: var(--spacing-section-sm);
+}
+
+@utility py-section {
+  padding-top: var(--spacing-section);
+  padding-bottom: var(--spacing-section);
+}
+
+@utility py-section-lg {
+  padding-top: var(--spacing-section-lg);
+  padding-bottom: var(--spacing-section-lg);
+}
+
+/* .section-y and .section-y-lg use direct media queries
+   because @apply with responsive prefixes (lg:) is not
+   supported in @layer components. */
+@media (min-width: theme(--breakpoint-lg)) {
+  .section-y {
+    padding-top: var(--spacing-section);
+    padding-bottom: var(--spacing-section);
+  }
+
+  .section-y-lg {
+    padding-top: var(--spacing-section-lg);
+    padding-bottom: var(--spacing-section-lg);
+  }
+}
+
+@keyframes footer-aurora-drift {
+
+  0%,
+  100% {
+    transform: translate3d(-8%, -6%, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(8%, 6%, 0) scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-aurora {
+    animation: none;
+  }
 }

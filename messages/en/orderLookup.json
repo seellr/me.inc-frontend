@@ -1,0 +1,19 @@
+{
+  "title": "Order Lookup",
+  "heading": "Track your order",
+  "body": "Enter your order number and email to see its status.",
+  "orderNumber": "Order number",
+  "email": "Email",
+  "submit": "Track order",
+  "loading": "Looking up your order…",
+  "notFoundTitle": "We couldn't find that order",
+  "notFoundBody": "Double check the order number and email, then try again.",
+  "pending": "Pending",
+  "stage": {
+    "placed": "Placed",
+    "processing": "Processing",
+    "shipped": "Shipped",
+    "out_for_delivery": "Out for delivery",
+    "delivered": "Delivered"
+  }
+}

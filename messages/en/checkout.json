@@ -1,0 +1,56 @@
+{
+  "title": "Checkout",
+  "steps": {
+    "shipping": "Shipping",
+    "payment": "Payment",
+    "review": "Review"
+  },
+  "shipping": {
+    "heading": "Shipping address",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "address": "Address",
+    "addressLine2": "Apartment, suite, etc. (optional)",
+    "city": "City",
+    "country": "Country",
+    "postalCode": "Postal code",
+    "continue": "Continue to payment"
+  },
+  "payment": {
+    "heading": "Payment",
+    "codOnly": "Cash on delivery — pay when your order arrives.",
+    "cardNumber": "Card number",
+    "expiry": "Expiry",
+    "cvc": "CVC",
+    "securityNote": "Your payment is encrypted and processed securely.",
+    "continue": "Review order"
+  },
+  "loginRequired": "Log in to check out.",
+  "goToLogin": "Log in",
+  "review": {
+    "heading": "Review your order",
+    "placeOrder": "Place order"
+  },
+  "confirmation": {
+    "heading": "Order confirmed",
+    "body": "We've received your order and will start processing it right away.",
+    "orderNumber": "Order number",
+    "trackOrder": "Track your order"
+  },
+  "funnel": {
+    "oto": {
+      "defaultHeadline": "Special one-time offer",
+      "badge": "Limited time"
+    },
+    "downsell": {
+      "defaultHeadline": "Wait — here's a better fit"
+    },
+    "complete": {
+      "heading": "You're all set!",
+      "trackOrder": "Track your order"
+    },
+    "accept": "Yes, add it",
+    "decline": "No thanks"
+  },
+  "back": "Back"
+}
