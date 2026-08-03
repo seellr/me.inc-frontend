@@ -38,7 +38,7 @@ export function Footer() {
       <Container className="section-y relative flex flex-col gap-16">
         {/* Bento CTA row: newsletter card + accent CTA card */}
         <div className="grid gap-6 md:grid-cols-2">
-          <Card variant="static" className="bg-background text-foreground">
+          <Card className="bg-background text-foreground">
             <p className="text-sm font-semibold">{t('newsletterLabel')}</p>
             <p className="mt-1 max-w-sm text-sm text-muted-foreground">{t('tagline')}</p>
             <div className="mt-4 flex max-w-sm items-center gap-2">
@@ -49,7 +49,7 @@ export function Footer() {
             </div>
           </Card>
 
-          <Card variant="dark" className="bg-primary text-primary-foreground flex flex-col justify-between gap-6">
+          <Card className="bg-primary text-primary-foreground flex flex-col justify-between gap-6">
             <p className="heading-4 text-primary-foreground">{t('ctaHeadline')}</p>
             <div className="flex items-center justify-between gap-4">
               <Button render={<Link href="/orders/lookup" />} nativeButton={false} variant="default" className="bg-secondary text-secondary-foreground" >

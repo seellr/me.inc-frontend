@@ -38,7 +38,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
   }
 
   return (
-    <Card variant="interactive" className="group flex flex-col overflow-hidden rounded-3xl p-0! gap-0! h-full">
+    <Card className="group flex flex-col overflow-hidden rounded-3xl p-0! gap-0! h-full">
       <Link href={`/products/${product.slug}`} className="relative block aspect-[4/3] overflow-hidden bg-muted">
         {product.image ? (
           <Image

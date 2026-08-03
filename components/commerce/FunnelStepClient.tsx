@@ -80,7 +80,7 @@ export function FunnelStepClient({ orderUlid, initialStep }: { orderUlid: string
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <Card variant="static" className="mx-auto flex max-w-lg flex-col items-center gap-4 p-10 text-center">
+        <Card className="mx-auto flex max-w-lg flex-col items-center gap-4 p-10 text-center">
           <CheckCircle2 className="size-14 text-primary" />
           <h1 className="text-2xl font-bold">{t('complete.heading')}</h1>
           <Button nativeButton={false} render={<Link href="/orders/lookup" />} size="lg">
@@ -102,7 +102,7 @@ export function FunnelStepClient({ orderUlid, initialStep }: { orderUlid: string
         exit={{ opacity: 0, y: -16 }}
         transition={{ duration: 0.3 }}
       >
-        <Card variant="static" className="mx-auto grid max-w-3xl overflow-hidden p-0 sm:grid-cols-2">
+        <Card className="mx-auto grid max-w-3xl overflow-hidden p-0 sm:grid-cols-2">
           <div className="relative aspect-square bg-muted sm:aspect-auto">
             {step.product?.hero_image_url ? (
               <Image

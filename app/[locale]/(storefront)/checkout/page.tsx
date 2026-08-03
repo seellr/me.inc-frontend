@@ -166,13 +166,13 @@ export default function CheckoutPage() {
 
   const ctaAction =
     step === 'shipping' ? tryAdvanceShipping :
-    step === 'payment' ? tryAdvancePayment :
-    handlePlaceOrder
+      step === 'payment' ? tryAdvancePayment :
+        handlePlaceOrder
 
   const ctaLabel =
     step === 'shipping' ? t('shipping.continue') :
-    step === 'payment' ? t('payment.continue') :
-    t('review.placeOrder')
+      step === 'payment' ? t('payment.continue') :
+        t('review.placeOrder')
 
   function field(name: keyof Address) {
     return {
@@ -192,252 +192,252 @@ export default function CheckoutPage() {
 
   return (
     <>
-    <FunnelModals open={funnelOpen} onFinish={handleFunnelFinish} />
-    <Section as="div" className="section-y">
-      <Container>
-        <h1 className="heading-2 mb-2">{t('title')}</h1>
-        <JourneyProgress current={JOURNEY_STEP[step]} />
+      <FunnelModals open={funnelOpen} onFinish={handleFunnelFinish} />
+      <Section as="div" className="section-y">
+        <Container>
+          <h1 className="heading-2 mb-2">{t('title')}</h1>
+          <JourneyProgress current={JOURNEY_STEP[step]} />
 
-        <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
-          <div className="overflow-hidden">
-            <AnimatePresence mode="wait" initial={false}>
-              {step === 'shipping' && (
-                <motion.div
-                  key="shipping"
-                  variants={stepVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.25, ease: 'easeInOut' }}
-                >
-                  <Card variant="static" className="flex flex-col gap-6">
-                    <div className="flex items-center gap-2">
-                      <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">1</span>
-                      <p className="text-lg font-semibold">{t('shipping.heading')}</p>
-                      <MapPin className="ms-auto size-4 text-muted-foreground" />
-                    </div>
-
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.fullName')}</label>
-                        <Input
-                          placeholder="John Doe"
-                          {...field('fullName')}
-                          className={fieldErrors.fullName ? 'border-destructive' : ''}
-                        />
-                        {fieldErrors.fullName && <p className="text-xs text-destructive">{fieldErrors.fullName}</p>}
+          <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
+            <div className="overflow-hidden">
+              <AnimatePresence mode="wait" initial={false}>
+                {step === 'shipping' && (
+                  <motion.div
+                    key="shipping"
+                    variants={stepVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                  >
+                    <Card className="flex flex-col gap-6">
+                      <div className="flex items-center gap-2">
+                        <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">1</span>
+                        <p className="text-lg font-semibold">{t('shipping.heading')}</p>
+                        <MapPin className="ms-auto size-4 text-muted-foreground" />
                       </div>
 
-                      <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Email</label>
-                        <Input
-                          type="email"
-                          placeholder="you@example.com"
-                          value={email}
-                          onChange={(e) => { setEmail(e.target.value); if (fieldErrors.email) setFieldErrors((fe) => ({ ...fe, email: undefined })) }}
-                          className={fieldErrors.email ? 'border-destructive' : ''}
-                        />
-                        {fieldErrors.email && <p className="text-xs text-destructive">{fieldErrors.email}</p>}
-                      </div>
-
-                      <div className="flex flex-col gap-1 sm:col-span-2">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.phone')}</label>
-                        <Input
-                          type="tel"
-                          placeholder="+1 555 000 0000"
-                          {...field('phone')}
-                          className={fieldErrors.phone ? 'border-destructive' : ''}
-                        />
-                        {fieldErrors.phone && <p className="text-xs text-destructive">{fieldErrors.phone}</p>}
-                      </div>
-
-                      <div className="flex flex-col gap-1 sm:col-span-2">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.address')}</label>
-                        <Input
-                          placeholder="123 Main St"
-                          {...field('line1')}
-                          className={fieldErrors.line1 ? 'border-destructive' : ''}
-                        />
-                        {fieldErrors.line1 && <p className="text-xs text-destructive">{fieldErrors.line1}</p>}
-                      </div>
-
-                      <div className="flex flex-col gap-1 sm:col-span-2">
-                        <Input
-                          placeholder={t('shipping.addressLine2')}
-                          {...field('line2')}
-                        />
-                      </div>
-
-                      <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.city')}</label>
-                        <Input
-                          placeholder="New York"
-                          {...field('city')}
-                          className={fieldErrors.city ? 'border-destructive' : ''}
-                        />
-                        {fieldErrors.city && <p className="text-xs text-destructive">{fieldErrors.city}</p>}
-                      </div>
-
-                      <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.country')}</label>
-                        <Input
-                          placeholder="United States"
-                          {...field('country')}
-                          className={fieldErrors.country ? 'border-destructive' : ''}
-                        />
-                        {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
-                      </div>
-
-                      <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.postalCode')}</label>
-                        <Input
-                          placeholder="10001"
-                          {...field('postalCode')}
-                          className={fieldErrors.postalCode ? 'border-destructive' : ''}
-                        />
-                        {fieldErrors.postalCode && <p className="text-xs text-destructive">{fieldErrors.postalCode}</p>}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 rounded-xl bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
-                      <Truck className="size-4 shrink-0 text-primary" />
-                      <span>Free delivery on all orders</span>
-                    </div>
-                  </Card>
-                </motion.div>
-              )}
-
-              {step === 'payment' && (
-                <motion.div
-                  key="payment"
-                  variants={stepVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.25, ease: 'easeInOut' }}
-                >
-                  <Card variant="static" className="flex flex-col gap-6">
-                    <div className="flex items-center gap-2">
-                      <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">2</span>
-                      <p className="text-lg font-semibold">{t('payment.heading')}</p>
-                      <CreditCard className="ms-auto size-4 text-muted-foreground" />
-                    </div>
-
-                    <div className="flex flex-col gap-3">
-                      <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Payment method</label>
-                      <label className="flex cursor-pointer items-start gap-4 rounded-xl border-2 border-primary bg-primary/5 p-4 transition-colors">
-                        <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-primary">
-                          <div className="size-2 rounded-full bg-white" />
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="flex flex-col gap-1">
+                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.fullName')}</label>
+                          <Input
+                            placeholder="John Doe"
+                            {...field('fullName')}
+                            className={fieldErrors.fullName ? 'border-destructive' : ''}
+                          />
+                          {fieldErrors.fullName && <p className="text-xs text-destructive">{fieldErrors.fullName}</p>}
                         </div>
-                        <div className="flex flex-col gap-0.5">
-                          <span className="font-semibold text-foreground">Cash on Delivery</span>
-                          <span className="text-sm text-muted-foreground">{t('payment.codOnly')}</span>
+
+                        <div className="flex flex-col gap-1">
+                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Email</label>
+                          <Input
+                            type="email"
+                            placeholder="you@example.com"
+                            value={email}
+                            onChange={(e) => { setEmail(e.target.value); if (fieldErrors.email) setFieldErrors((fe) => ({ ...fe, email: undefined })) }}
+                            className={fieldErrors.email ? 'border-destructive' : ''}
+                          />
+                          {fieldErrors.email && <p className="text-xs text-destructive">{fieldErrors.email}</p>}
                         </div>
-                        <span className="ms-auto rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">COD</span>
-                      </label>
-                    </div>
 
-                    <div className="flex items-center gap-2 rounded-xl bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
-                      <ShieldCheck className="size-4 shrink-0 text-primary" />
-                      <span>{t('payment.securityNote')}</span>
-                    </div>
-                  </Card>
-                </motion.div>
-              )}
+                        <div className="flex flex-col gap-1 sm:col-span-2">
+                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.phone')}</label>
+                          <Input
+                            type="tel"
+                            placeholder="+1 555 000 0000"
+                            {...field('phone')}
+                            className={fieldErrors.phone ? 'border-destructive' : ''}
+                          />
+                          {fieldErrors.phone && <p className="text-xs text-destructive">{fieldErrors.phone}</p>}
+                        </div>
 
-              {step === 'review' && (
-                <motion.div
-                  key="review"
-                  variants={stepVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.25, ease: 'easeInOut' }}
-                >
-                  <Card variant="static" className="flex flex-col gap-6">
-                    <div className="flex items-center gap-2">
-                      <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">3</span>
-                      <p className="text-lg font-semibold">{t('review.heading')}</p>
-                      <ClipboardList className="ms-auto size-4 text-muted-foreground" />
-                    </div>
+                        <div className="flex flex-col gap-1 sm:col-span-2">
+                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.address')}</label>
+                          <Input
+                            placeholder="123 Main St"
+                            {...field('line1')}
+                            className={fieldErrors.line1 ? 'border-destructive' : ''}
+                          />
+                          {fieldErrors.line1 && <p className="text-xs text-destructive">{fieldErrors.line1}</p>}
+                        </div>
 
-                    {/* Items */}
-                    <div className="flex flex-col gap-3">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
-                        <Package className="size-3.5" /> Items ({items.length})
-                      </p>
-                      {items.map((item) => (
-                        <div key={item.productId} className="flex items-center justify-between gap-3 rounded-xl bg-muted/40 px-4 py-3">
-                          <div className="flex flex-col gap-0.5">
-                            <span className="text-sm font-medium">{item.name}</span>
-                            <span className="text-xs text-muted-foreground">Qty: {item.quantity}</span>
+                        <div className="flex flex-col gap-1 sm:col-span-2">
+                          <Input
+                            placeholder={t('shipping.addressLine2')}
+                            {...field('line2')}
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.city')}</label>
+                          <Input
+                            placeholder="New York"
+                            {...field('city')}
+                            className={fieldErrors.city ? 'border-destructive' : ''}
+                          />
+                          {fieldErrors.city && <p className="text-xs text-destructive">{fieldErrors.city}</p>}
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.country')}</label>
+                          <Input
+                            placeholder="United States"
+                            {...field('country')}
+                            className={fieldErrors.country ? 'border-destructive' : ''}
+                          />
+                          {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('shipping.postalCode')}</label>
+                          <Input
+                            placeholder="10001"
+                            {...field('postalCode')}
+                            className={fieldErrors.postalCode ? 'border-destructive' : ''}
+                          />
+                          {fieldErrors.postalCode && <p className="text-xs text-destructive">{fieldErrors.postalCode}</p>}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 rounded-xl bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
+                        <Truck className="size-4 shrink-0 text-primary" />
+                        <span>Free delivery on all orders</span>
+                      </div>
+                    </Card>
+                  </motion.div>
+                )}
+
+                {step === 'payment' && (
+                  <motion.div
+                    key="payment"
+                    variants={stepVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                  >
+                    <Card className="flex flex-col gap-6">
+                      <div className="flex items-center gap-2">
+                        <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">2</span>
+                        <p className="text-lg font-semibold">{t('payment.heading')}</p>
+                        <CreditCard className="ms-auto size-4 text-muted-foreground" />
+                      </div>
+
+                      <div className="flex flex-col gap-3">
+                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Payment method</label>
+                        <label className="flex cursor-pointer items-start gap-4 rounded-xl border-2 border-primary bg-primary/5 p-4 transition-colors">
+                          <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-primary">
+                            <div className="size-2 rounded-full bg-white" />
                           </div>
-                          <span className="text-sm font-semibold tabular-nums">{formatCurrency(item.price * item.quantity, locale)}</span>
+                          <div className="flex flex-col gap-0.5">
+                            <span className="font-semibold text-foreground">Cash on Delivery</span>
+                            <span className="text-sm text-muted-foreground">{t('payment.codOnly')}</span>
+                          </div>
+                          <span className="ms-auto rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">COD</span>
+                        </label>
+                      </div>
+
+                      <div className="flex items-center gap-2 rounded-xl bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
+                        <ShieldCheck className="size-4 shrink-0 text-primary" />
+                        <span>{t('payment.securityNote')}</span>
+                      </div>
+                    </Card>
+                  </motion.div>
+                )}
+
+                {step === 'review' && (
+                  <motion.div
+                    key="review"
+                    variants={stepVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                  >
+                    <Card className="flex flex-col gap-6">
+                      <div className="flex items-center gap-2">
+                        <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">3</span>
+                        <p className="text-lg font-semibold">{t('review.heading')}</p>
+                        <ClipboardList className="ms-auto size-4 text-muted-foreground" />
+                      </div>
+
+                      {/* Items */}
+                      <div className="flex flex-col gap-3">
+                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+                          <Package className="size-3.5" /> Items ({items.length})
+                        </p>
+                        {items.map((item) => (
+                          <div key={item.productId} className="flex items-center justify-between gap-3 rounded-xl bg-muted/40 px-4 py-3">
+                            <div className="flex flex-col gap-0.5">
+                              <span className="text-sm font-medium">{item.name}</span>
+                              <span className="text-xs text-muted-foreground">Qty: {item.quantity}</span>
+                            </div>
+                            <span className="text-sm font-semibold tabular-nums">{formatCurrency(item.price * item.quantity, locale)}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="h-px bg-border" />
+
+                      {/* Address */}
+                      <div className="flex flex-col gap-2">
+                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+                          <MapPin className="size-3.5" /> Shipping address
+                        </p>
+                        <div className="rounded-xl bg-muted/40 px-4 py-3 text-sm text-muted-foreground leading-relaxed">
+                          <p className="font-medium text-foreground">{address.fullName}</p>
+                          <p>{address.line1}{address.line2 ? `, ${address.line2}` : ''}</p>
+                          <p>{address.city}, {address.country} {address.postalCode}</p>
+                          <p>{address.phone} · {email}</p>
                         </div>
-                      ))}
-                    </div>
-
-                    <div className="h-px bg-border" />
-
-                    {/* Address */}
-                    <div className="flex flex-col gap-2">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
-                        <MapPin className="size-3.5" /> Shipping address
-                      </p>
-                      <div className="rounded-xl bg-muted/40 px-4 py-3 text-sm text-muted-foreground leading-relaxed">
-                        <p className="font-medium text-foreground">{address.fullName}</p>
-                        <p>{address.line1}{address.line2 ? `, ${address.line2}` : ''}</p>
-                        <p>{address.city}, {address.country} {address.postalCode}</p>
-                        <p>{address.phone} · {email}</p>
                       </div>
-                    </div>
 
-                    {/* Payment */}
-                    <div className="flex flex-col gap-2">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
-                        <CreditCard className="size-3.5" /> Payment
-                      </p>
-                      <div className="flex items-center gap-2 rounded-xl bg-muted/40 px-4 py-3 text-sm">
-                        <CheckCircle2 className="size-4 text-primary" />
-                        <span>Cash on Delivery</span>
+                      {/* Payment */}
+                      <div className="flex flex-col gap-2">
+                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+                          <CreditCard className="size-3.5" /> Payment
+                        </p>
+                        <div className="flex items-center gap-2 rounded-xl bg-muted/40 px-4 py-3 text-sm">
+                          <CheckCircle2 className="size-4 text-primary" />
+                          <span>Cash on Delivery</span>
+                        </div>
                       </div>
-                    </div>
 
-                    {placeError && <p className="text-sm text-destructive">{placeError}</p>}
-                  </Card>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                      {placeError && <p className="text-sm text-destructive">{placeError}</p>}
+                    </Card>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-            {/* Step indicator dots */}
-            <div className="mt-4 flex items-center justify-center gap-2">
-              {(['shipping', 'payment', 'review'] as Step[]).map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => {
-                    if (s === 'shipping') setStep('shipping')
-                    if (s === 'payment' && (step === 'review')) setStep('payment')
-                  }}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${step === s ? 'w-8 bg-primary' : 'w-3 bg-border'}`}
-                />
-              ))}
+              {/* Step indicator dots */}
+              <div className="mt-4 flex items-center justify-center gap-2">
+                {(['shipping', 'payment', 'review'] as Step[]).map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => {
+                      if (s === 'shipping') setStep('shipping')
+                      if (s === 'payment' && (step === 'review')) setStep('payment')
+                    }}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${step === s ? 'w-8 bg-primary' : 'w-3 bg-border'}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:sticky lg:top-24 lg:self-start">
+              <PriceSummary
+                subtotal={subtotal}
+                shipping={SHIPPING_ESTIMATE}
+                ctaLabel={isPlacing ? '...' : ctaLabel}
+                onCta={ctaAction}
+                disabled={isPlacing}
+                onCouponChange={setAppliedCoupon}
+              />
             </div>
           </div>
-
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <PriceSummary
-              subtotal={subtotal}
-              shipping={SHIPPING_ESTIMATE}
-              ctaLabel={isPlacing ? '...' : ctaLabel}
-              onCta={ctaAction}
-              disabled={isPlacing}
-              onCouponChange={setAppliedCoupon}
-            />
-          </div>
-        </div>
-      </Container>
-    </Section>
+        </Container>
+      </Section>
     </>
   )
 }

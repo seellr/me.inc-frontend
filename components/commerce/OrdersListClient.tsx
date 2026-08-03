@@ -73,7 +73,7 @@ export function OrdersListClient() {
     <div className="flex flex-col gap-3">
       {orders.map((order) => (
         <Link key={order.ulid} href={`/orders/${order.ulid}`} className="no-underline">
-          <Card variant="static" className="flex items-center justify-between gap-4 p-4 hover:bg-muted/50 transition-colors cursor-pointer">
+          <Card className="flex items-center justify-between gap-4 p-4 hover:bg-muted/50 transition-colors cursor-pointer">
             <div className="flex flex-col gap-0.5">
               <p className="text-sm font-semibold">{order.invoice_number ?? order.ulid.slice(0, 8)}</p>
               <p className="text-xs text-muted-foreground">{new Date(order.created_at).toLocaleDateString(locale)}</p>
