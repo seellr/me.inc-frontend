@@ -95,7 +95,7 @@ export function OrderDetailClient({
       </div>
 
       {/* Items */}
-      <Card variant="static" className="flex flex-col gap-4 p-5">
+      <Card className="flex flex-col gap-4 p-5">
         <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
           <Package className="size-3.5" /> Items ({order.items?.length ?? 0})
         </p>
@@ -135,7 +135,7 @@ export function OrderDetailClient({
 
       {/* Shipping address */}
       {order.shipping_address && (
-        <Card variant="static" className="flex flex-col gap-3 p-5">
+        <Card className="flex flex-col gap-3 p-5">
           <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
             <MapPin className="size-3.5" /> Shipping Address
           </p>
@@ -158,7 +158,7 @@ export function OrderDetailClient({
       )}
 
       {/* Payment */}
-      <Card variant="static" className="flex flex-col gap-3 p-5">
+      <Card className="flex flex-col gap-3 p-5">
         <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
           <CreditCard className="size-3.5" /> Payment
         </p>

@@ -88,7 +88,7 @@ export function PriceSummary({
   }
 
   return (
-    <Card variant="dark" className="bg-foreground text-background flex flex-col gap-4">
+    <Card className="bg-foreground text-background flex flex-col gap-4">
       <p className="text-sm font-semibold uppercase tracking-wide opacity-70">{t('orderSummary')}</p>
 
       <div className="flex flex-col gap-2 text-sm">

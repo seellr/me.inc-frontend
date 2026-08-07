@@ -37,7 +37,7 @@ export default function OrderLookupPage() {
         <h1 className="heading-2 mb-2 text-center">{t('heading')}</h1>
         <p className="body mb-8 text-center">{t('body')}</p>
 
-        <Card variant="static">
+        <Card>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:flex-row">
             <Input
               required
@@ -69,7 +69,7 @@ export default function OrderLookupPage() {
         )}
 
         {status === 'found' && order && (
-          <Card variant="static" className="mt-10">
+          <Card className="mt-10">
             <p className="mb-6 text-sm text-muted-foreground">
               {t('orderNumber')}: <span className="font-semibold text-foreground">{order.number}</span>
             </p>
