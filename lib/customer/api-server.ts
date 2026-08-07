@@ -8,26 +8,37 @@ export async function customerFetchServer<T>(path: string, init?: RequestInit): 
   const token = await getCustomerTokenCookie()
   const locale = await getLocale()
 
-  const res = await fetch(`${BACKEND_API_URL}${path}`, {
-    ...init,
-    headers: {
-      ...backendHeaders(locale, token),
-      ...(init?.headers as Record<string, string> | undefined),
-    },
-    cache: 'no-store',
-  })
+  try {
+    const res = await fetch(`${BACKEND_API_URL}${path}`, {
+      ...init,
+      headers: {
+        ...backendHeaders(locale, token),
+        ...(init?.headers as Record<string, string> | undefined),
+      },
+      cache: 'no-store',
+    })
 
-  const json = await res.json().catch(() => null)
+    const json = await res.json().catch(() => null)
 
-  if (!res.ok || !json?.success) {
+    if (!res.ok || !json?.success) {
+      return {
+        ok: false,
+        message: json?.message ?? `Request failed (${res.status})`,
+        errorCode: json?.error_code ?? 'unknown_error',
+        errors: json?.errors ?? null,
+        status: res.status,
+      }
+    }
+
+    return { ok: true, data: json.data as T, meta: json.meta }
+  } catch (error) {
+    console.error('customerFetchServer', { path, error })
     return {
       ok: false,
-      message: json?.message ?? `Request failed (${res.status})`,
-      errorCode: json?.error_code ?? 'unknown_error',
-      errors: json?.errors ?? null,
-      status: res.status,
+      message: 'Unable to reach the server',
+      errorCode: 'network_error',
+      errors: null,
+      status: 0,
     }
   }
-
-  return { ok: true, data: json.data as T, meta: json.meta }
 }
