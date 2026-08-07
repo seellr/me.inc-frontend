@@ -20,21 +20,26 @@ export type StoreApiResult<T> =
 export async function storeFetchServer<T>(path: string, revalidate = 300): Promise<StoreApiResult<T>> {
   const locale = await getLocale()
 
-  const res = await fetch(`${API_URL}${path}`, {
-    headers: {
-      Accept: 'application/json',
-      'x-api-key': API_KEY,
-      'Accept-Language': locale,
-      'X-Brand-Id': process.env.BRAND_ID ?? '1',
-    },
-    next: { revalidate },
-  })
+  try {
+    const res = await fetch(`${API_URL}${path}`, {
+      headers: {
+        Accept: 'application/json',
+        'x-api-key': API_KEY,
+        'Accept-Language': locale,
+        'X-Brand-Id': process.env.BRAND_ID ?? '1',
+      },
+      next: { revalidate },
+    })
 
-  const json = await res.json().catch(() => null)
+    const json = await res.json().catch(() => null)
 
-  if (!res.ok || !json?.success) {
-    return { ok: false, message: json?.message ?? `Request failed (${res.status})`, status: res.status }
+    if (!res.ok || !json?.success) {
+      return { ok: false, message: json?.message ?? `Request failed (${res.status})`, status: res.status }
+    }
+
+    return { ok: true, data: json.data as T, meta: json.meta }
+  } catch (error) {
+    console.error('storeFetchServer', { path, error })
+    return { ok: false, message: 'Unable to reach the server', status: 0 }
   }
-
-  return { ok: true, data: json.data as T, meta: json.meta }
 }
