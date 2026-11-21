@@ -1,38 +1,101 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { CustomerLoginRequestSchema, CustomerLoginResponseSchema } from '@/types/dto/customer-auth.dto'
+import { z } from 'zod'
+import {
+  CustomerLoginRequestSchema,
+  CustomerLoginResponseSchema,
+} from '@/types/dto/customer-auth.dto'
 import { setCustomerTokenCookie } from '@/lib/customer/auth'
-import { BACKEND_API_URL, backendHeaders } from '@/lib/admin/backend-client'
+import { backendJson } from '@/lib/server/backend'
+
+const THIRTY_DAYS = 30 * 24 * 60 * 60
+
+function validationFailure(error: z.ZodError): NextResponse {
+  return NextResponse.json(
+    {
+      success: false,
+      message: 'Invalid request',
+      error_code: 'validation_error',
+      errors: error.flatten(),
+    },
+    { status: 422 },
+  )
+}
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null)
   const parsed = CustomerLoginRequestSchema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json(
-      { success: false, message: 'Invalid request', errors: parsed.error.flatten() },
-      { status: 422 },
-    )
-  }
+  if (!parsed.success) return validationFailure(parsed.error)
 
-  const locale = request.headers.get('x-locale') ?? 'en'
+  const { identifier, password, remember_me } = parsed.data
 
-  const res = await fetch(`${BACKEND_API_URL}/customer/auth/login`, {
+  const result = await backendJson(request, '/customer/auth/login', {
     method: 'POST',
-    headers: backendHeaders(locale),
-    body: JSON.stringify({ ...parsed.data, brand_id: 1 }),
+    body: { identifier, password },
   })
-  const json = await res.json().catch(() => ({}))
 
-  if (!res.ok || !json.success) {
+  if (result.networkError) {
     return NextResponse.json(
-      { success: false, message: json.message ?? 'Login failed', error_code: json.error_code ?? 'login_failed' },
-      { status: res.status },
+      { success: false, message: 'Backend unavailable', error_code: 'backend_unavailable' },
+      { status: 502 },
     )
   }
 
-  const data = CustomerLoginResponseSchema.parse(json.data)
-  const rememberMe = !!(body as Record<string, unknown>)?.remember_me
-  const maxAge = rememberMe ? 30 * 24 * 60 * 60 : (data.expires_in || 60 * 60)
-  await setCustomerTokenCookie(data.access_token, maxAge)
+  const payload = result.json as Record<string, unknown> | null
 
-  return NextResponse.json({ success: true, data: { user: data.user } })
+  // Email not verified is a normal, actionable state — not a failed login.
+  if (result.status === 403 && payload?.error_code === 'auth_email_not_verified') {
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          (typeof payload.message === 'string' && payload.message) ||
+          'Please verify your email before logging in.',
+        error_code: 'auth_email_not_verified',
+        requires_email_verification: true,
+      },
+      { status: 403 },
+    )
+  }
+
+  if (!result.ok || !payload || payload.success === false) {
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          (typeof payload?.message === 'string' && payload.message) || 'Login failed',
+        error_code:
+          (typeof payload?.error_code === 'string' && payload.error_code) || 'login_failed',
+        ...(payload?.errors ? { errors: payload.errors } : {}),
+      },
+      { status: result.status },
+    )
+  }
+
+  const login = CustomerLoginResponseSchema.safeParse(payload.data)
+  if (!login.success) {
+    console.error('[auth/login] bad_backend_shape', {
+      paths: login.error.issues.map((issue) => issue.path.map(String).join('.')),
+    })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Unexpected response from the server',
+        error_code: 'bad_backend_shape',
+      },
+      { status: 502 },
+    )
+  }
+
+  const expiresIn = login.data.expires_in ?? 60 * 60
+  await setCustomerTokenCookie(
+    login.data.access_token,
+    remember_me ? THIRTY_DAYS : expiresIn,
+  )
+
+  // The token is never returned to the browser in a JSON body.
+  return NextResponse.json({
+    success: true,
+    message: 'Logged in',
+    data: { user: login.data.user },
+  })
 }

@@ -7,84 +7,72 @@ import { Link } from '@/i18n/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { formatCurrency } from '@/lib/currency'
-
-interface CouponValidation {
-  code: string
-  type: number
-  value: number
-}
+import { formatMoney } from '@/lib/currency'
+import { useCart } from '@/lib/cart/context'
+import type { MoneyValue } from '@/types/commerce'
 
 export function PriceSummary({
-  subtotal,
   shipping,
   ctaLabel,
   onCta,
   ctaHref,
   disabled,
-  onCouponChange,
+  showCouponInput = true,
 }: {
-  subtotal: number
-  shipping: number
+  shipping: MoneyValue
   ctaLabel: string
   onCta?: () => void
   ctaHref?: string
   disabled?: boolean
-  onCouponChange?: (coupon: { code: string; discount: number } | null) => void
+  showCouponInput?: boolean
 }) {
   const locale = useLocale()
   const t = useTranslations('cart')
+  const {
+    subtotal,
+    discount,
+    vat,
+    vatLabel,
+    total,
+    coupon,
+    currency,
+    applyCoupon,
+    removeCoupon,
+  } = useCart()
 
   const [code, setCode] = useState('')
-  const [applied, setApplied] = useState<{ code: string; discount: number; label: string } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isApplying, setIsApplying] = useState(false)
+  const [isRemoving, setIsRemoving] = useState(false)
 
-  const discount = applied?.discount ?? 0
-  const total = subtotal + shipping - discount
-
-  async function applyCode() {
+  async function handleApply() {
     const upper = code.trim().toUpperCase()
-    if (!upper) return
+    if (!upper || isApplying) return
     setIsApplying(true)
     setError(null)
-    try {
-      const locale = typeof document !== 'undefined' ? document.documentElement.lang : 'en'
-      const res = await fetch(`/api/public/coupons/${encodeURIComponent(upper)}/validate`, {
-        headers: { 'x-locale': locale },
-      })
-      const json = await res.json()
-      if (!res.ok || !json.success) {
-        setError(json.message ?? t('invalidPromo'))
-        setApplied(null)
-        onCouponChange?.(null)
-        return
-      }
-      const coupon: CouponValidation = json.data
-      let discountAmt = 0
-      let label = ''
-      if (coupon.type === 1) {
-        discountAmt = Math.min(coupon.value, subtotal)
-        label = `${formatCurrency(coupon.value, locale)} off`
+    const result = await applyCoupon(upper)
+    if (result.error) {
+      if (result.error === 'coupon_not_found') {
+        setError(t('invalidPromo'))
+      } else if (result.error === 'coupon_not_applicable') {
+        setError(t('couponNotApplicable'))
+      } else if (result.error === 'cart_empty') {
+        setError(t('emptyTitle'))
       } else {
-        discountAmt = Math.round(subtotal * (coupon.value / 100))
-        label = `${coupon.value}% off`
+        setError(result.error)
       }
-      const next = { code: upper, discount: discountAmt, label }
-      setApplied(next)
+    } else {
       setCode('')
-      onCouponChange?.({ code: upper, discount: discountAmt })
-    } catch {
-      setError(t('invalidPromo'))
-    } finally {
-      setIsApplying(false)
     }
+    setIsApplying(false)
   }
 
-  function removeCode() {
-    setApplied(null)
+  async function handleRemove() {
+    if (isRemoving) return
+    setIsRemoving(true)
+    await removeCoupon()
     setError(null)
-    onCouponChange?.(null)
+    setIsRemoving(false)
   }
 
   return (
@@ -94,52 +82,86 @@ export function PriceSummary({
       <div className="flex flex-col gap-2 text-sm">
         <div className="flex justify-between">
           <span className="opacity-70">{t('subtotal')}</span>
-          <span className="font-medium tabular-nums">{formatCurrency(subtotal, locale)}</span>
+          <span className="font-medium tabular-nums">{formatMoney(subtotal, currency, locale)}</span>
         </div>
-        {discount > 0 && (
+        {Number(discount) > 0 && (
           <div className="flex justify-between text-green-400">
-            <span className="flex items-center gap-1"><Tag className="size-3" />{applied!.code}</span>
-            <span className="font-medium tabular-nums">−{formatCurrency(discount, locale)}</span>
+            <span className="flex items-center gap-1">
+              <Tag className="size-3" />
+              {coupon?.code ?? t('discount')}
+            </span>
+            <span className="font-medium tabular-nums">
+              -{formatMoney(discount, currency, locale)}
+            </span>
+          </div>
+        )}
+        {Number(vat) > 0 && (
+          <div className="flex justify-between">
+            <span className="opacity-70">{vatLabel ?? t('vat')}</span>
+            <span className="font-medium tabular-nums">{formatMoney(vat, currency, locale)}</span>
           </div>
         )}
         <div className="flex justify-between">
           <span className="opacity-70">{t('shipping')}</span>
           <span className="font-medium tabular-nums">
-            {shipping === 0 ? t('free') : formatCurrency(shipping, locale)}
+            {Number(shipping) === 0 ? t('free') : formatMoney(shipping, currency, locale)}
           </span>
         </div>
       </div>
 
-      {applied ? (
-        <div className="flex items-center justify-between rounded-lg bg-green-500/15 px-3 py-2 text-sm">
-          <span className="flex items-center gap-1.5 text-green-400 font-medium">
-            <Tag className="size-3.5" />{applied.code} ({applied.label})
-          </span>
-          <button type="button" onClick={removeCode} className="text-background/50 hover:text-background">
-            <X className="size-4" />
-          </button>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2">
-            <Input
-              placeholder={t('promoPlaceholder')}
-              value={code}
-              onChange={(e) => { setCode(e.target.value); setError(null) }}
-              onKeyDown={(e) => e.key === 'Enter' && applyCode()}
-              className="border-background/25 bg-background/10 text-background placeholder:text-background/50"
-            />
-            <Button variant="secondary" size="sm" className="shrink-0" onClick={applyCode} disabled={isApplying}>
-              {isApplying ? '...' : t('apply')}
-            </Button>
+      {showCouponInput &&
+        (coupon ? (
+          <div className="flex items-center justify-between rounded-lg bg-green-500/15 px-3 py-2 text-sm">
+            <span className="flex items-center gap-1.5 text-green-400 font-medium">
+              <Tag className="size-3.5" />
+              {coupon.code}
+            </span>
+            <button
+              type="button"
+              onClick={handleRemove}
+              disabled={isRemoving}
+              aria-label={t('removeCoupon')}
+              className="text-background/50 hover:text-background disabled:opacity-50"
+            >
+              <X className="size-4" />
+            </button>
           </div>
-          {error && <p className="text-xs text-red-400">{error}</p>}
-        </div>
-      )}
+        ) : (
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <Input
+                aria-label={t('promoPlaceholder')}
+                placeholder={t('promoPlaceholder')}
+                value={code}
+                onChange={(e) => {
+                  setCode(e.target.value)
+                  setError(null)
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    void handleApply()
+                  }
+                }}
+                className="border-background/25 bg-background/10 text-background placeholder:text-background/50"
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                className="shrink-0"
+                onClick={handleApply}
+                disabled={isApplying || !code.trim()}
+              >
+                {isApplying ? '…' : t('apply')}
+              </Button>
+            </div>
+            {error && <p className="text-xs text-red-400">{error}</p>}
+          </div>
+        ))}
 
       <div className="flex justify-between border-t border-background/15 pt-4 text-base font-semibold">
         <span>{t('total')}</span>
-        <span className="tabular-nums">{formatCurrency(total, locale)}</span>
+        <span className="tabular-nums">{formatMoney(total, currency, locale)}</span>
       </div>
 
       <Button

@@ -25,8 +25,16 @@ export function ProductCard({ product }: { product: StoreProduct }) {
   const t = useTranslations('products')
   const { addItem } = useCart()
 
-  const handleAddToCart = () => {
-    addItem(product.id, 1, { name: product.name, price: product.price, image: product.image, slug: product.slug })
+  const handleAddToCart = async () => {
+    const { error } = await addItem(product.id, 1)
+    if (error === 'product_not_purchasable') {
+      sileo.error({ title: t('itemUnavailable') })
+      return
+    }
+    if (error) {
+      sileo.error({ title: error })
+      return
+    }
     sileo.success({
       title: "Added successfully",
       fill: "black",
@@ -34,7 +42,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
         title: "text-white!",
         description: "text-white/75!",
       },
-    });
+    })
   }
 
   return (

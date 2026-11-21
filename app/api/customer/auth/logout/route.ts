@@ -1,18 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getCustomerTokenCookie, clearCustomerTokenCookie } from '@/lib/customer/auth'
-import { BACKEND_API_URL, backendHeaders } from '@/lib/admin/backend-client'
+import {
+  clearCustomerTokenCookie,
+  getCustomerTokenCookie,
+} from '@/lib/customer/auth'
+import { backendJson } from '@/lib/server/backend'
 
+/**
+ * Always clears the cookie, even when the backend is unreachable or returns an
+ * error. The browser must never stay "logged in" against a dead session.
+ */
 export async function POST(request: NextRequest) {
   const token = await getCustomerTokenCookie()
-  const locale = request.headers.get('x-locale') ?? 'en'
 
   if (token) {
-    await fetch(`${BACKEND_API_URL}/customer/auth/logout`, {
+    await backendJson(request, '/customer/auth/logout', {
       method: 'POST',
-      headers: backendHeaders(locale, token),
-    }).catch(() => {})
+      token,
+    }).catch(() => undefined)
   }
 
   await clearCustomerTokenCookie()
-  return NextResponse.json({ success: true })
+  return new NextResponse(null, { status: 204 })
 }

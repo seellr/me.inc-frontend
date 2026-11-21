@@ -29,7 +29,8 @@
   "goToLogin": "تسجيل الدخول",
   "review": {
     "heading": "راجع طلبك",
-    "placeOrder": "تأكيد الطلب"
+    "placeOrder": "تأكيد الطلب",
+    "cartEmpty": "سلتك فارغة. أضف منتجات قبل تأكيد الطلب."
   },
   "confirmation": {
     "heading": "تم تأكيد الطلب",

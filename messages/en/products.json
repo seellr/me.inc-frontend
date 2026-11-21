@@ -4,6 +4,7 @@
   "addToCart": "Add to cart",
   "loginToAdd": "Login to add to cart",
   "addedToCart": "Added to cart",
+  "itemUnavailable": "This item is no longer available",
   "quantity": "Quantity",
   "relatedTitle": "You may also like",
   "sortLabel": "Sort",

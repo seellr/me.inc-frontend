@@ -29,7 +29,8 @@
   "goToLogin": "Log in",
   "review": {
     "heading": "Review your order",
-    "placeOrder": "Place order"
+    "placeOrder": "Place order",
+    "cartEmpty": "Your cart is empty. Add items before placing an order."
   },
   "confirmation": {
     "heading": "Order confirmed",

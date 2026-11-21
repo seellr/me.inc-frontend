@@ -19,8 +19,8 @@ export default async function ProductsPage({
   setRequestLocale(locale)
 
   const [result, t] = await Promise.all([storeFetchServer<Product[]>('/products', 0), getTranslations('products')])
+  console.log('Products API Result:', result)
   const products = (result.ok ? result.data : []).map(productToStoreProduct)
-
   return (
     <Section as="div" className="section-y">
       <Container>

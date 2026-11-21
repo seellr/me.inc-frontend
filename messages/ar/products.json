@@ -4,6 +4,7 @@
   "addToCart": "أضف إلى السلة",
   "loginToAdd": "سجّل دخولك لإضافة للسلة",
   "addedToCart": "أُضيف إلى السلة",
+  "itemUnavailable": "هذا المنتج لم يعد متاحًا",
   "quantity": "الكمية",
   "relatedTitle": "قد يعجبك أيضًا",
   "sortLabel": "الترتيب",

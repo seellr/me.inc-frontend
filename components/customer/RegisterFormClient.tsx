@@ -11,6 +11,7 @@ import { Eye, EyeOff, Mail, Phone, CheckCircle2 } from 'lucide-react'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useCart } from '@/lib/cart/context'
 
 type Method = 'email' | 'phone'
 type Step = 'form' | 'email-pending' | 'otp'
@@ -31,6 +32,7 @@ type FormValues = z.infer<typeof baseSchema>
 export function RegisterFormClient({ locale }: { locale: string }) {
   const t = useTranslations('auth')
   const router = useRouter()
+  const { setAuthenticated } = useCart()
   const [method, setMethod] = useState<Method>('email')
   const [step, setStep] = useState<Step>('form')
   const [isPending, setIsPending] = useState(false)
@@ -103,6 +105,7 @@ export function RegisterFormClient({ locale }: { locale: string }) {
         return
       }
       toast.success('Phone verified — logging you in')
+      setAuthenticated(true)
       router.push(`/${locale}`)
       router.refresh()
     } finally {
