@@ -1,37 +1,53 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { BACKEND_API_URL, BACKEND_API_KEY } from '@/lib/admin/backend-client'
+import { handleAllowlistedRequest, type ProxyRule } from '@/lib/server/proxy'
 
-async function forward(request: NextRequest, path: string[]): Promise<NextResponse> {
-  const locale = request.headers.get('x-locale') ?? 'en'
-  const guestToken = request.headers.get('x-guest-token') ?? ''
-  const search = request.nextUrl.search
-  const targetUrl = `${BACKEND_API_URL}/${path.join('/')}${search}`
+/**
+ * Guest cart proxy. Every rule requires a UUID X-Guest-Token, except that the
+ * merge call may also carry the customer token so the backend can attach the
+ * guest cart to the freshly logged-in customer.
+ */
+const RULES: ProxyRule[] = [
+  { method: 'GET', path: '/cart', target: '/guest/cart', auth: 'guest' },
+  { method: 'POST', path: '/cart/items', target: '/guest/cart/items', auth: 'guest' },
+  {
+    method: 'DELETE',
+    path: '/cart/items/:productUlid',
+    target: '/guest/cart/items/:productUlid',
+    auth: 'guest',
+  },
+  { method: 'POST', path: '/cart/coupon', target: '/guest/cart/coupon', auth: 'guest' },
+  { method: 'DELETE', path: '/cart/coupon', target: '/guest/cart/coupon', auth: 'guest' },
+  { method: 'POST', path: '/cart/merge', target: '/guest/cart/merge', auth: 'guest' },
+]
 
-  const body = request.method === 'GET' || request.method === 'DELETE' ? undefined : await request.text()
-
-  const res = await fetch(targetUrl, {
-    method: request.method,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'x-api-key': BACKEND_API_KEY,
-      'Accept-Language': locale,
-      'X-Brand-Id': '1',
-      ...(guestToken ? { 'X-Guest-Token': guestToken } : {}),
-    },
-    body,
-  })
-
-  const json = await res.json().catch(() => ({}))
-  return NextResponse.json(json, { status: res.status })
+async function dispatch(request: NextRequest, path: string[]) {
+  return handleAllowlistedRequest(request, { prefix: 'guest', path, rules: RULES })
 }
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
-  return forward(request, (await params).path)
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> },
+) {
+  return dispatch(request, (await params).path)
 }
-export async function POST(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
-  return forward(request, (await params).path)
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> },
+) {
+  return dispatch(request, (await params).path)
 }
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
-  return forward(request, (await params).path)
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> },
+) {
+  return dispatch(request, (await params).path)
+}
+
+export async function PUT() {
+  return NextResponse.json(
+    { success: false, message: 'Method not allowed', error_code: 'method_not_allowed' },
+    { status: 405 },
+  )
 }

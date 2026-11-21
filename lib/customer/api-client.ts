@@ -1,35 +1,33 @@
 'use client'
 
-import type { ApiResult } from '@/lib/admin/api-server'
+import type { ZodType } from 'zod'
+import { apiFetch } from '@/lib/api/client'
+import type { ApiResult } from '@/lib/api/types'
 
-export async function customerFetchClient<T>(path: string, init?: RequestInit): Promise<ApiResult<T>> {
-  try {
-    const locale = typeof document !== 'undefined' ? document.documentElement.lang : 'en'
+export type { ApiResult } from '@/lib/api/types'
 
-    const res = await fetch(`/api/customer${path}`, {
-      ...init,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'x-locale': locale,
-        ...(init?.headers as Record<string, string> | undefined),
-      },
-    })
-    const json = await res.json().catch(() => null)
+/**
+ * Calls the authenticated customer proxy.
+ * 401 -> clears the session server-side and redirects to /login?next=…
+ */
+export function customerFetchClient<T>(
+  path: string,
+  init: RequestInit & { schema?: ZodType; redirectOn401?: boolean; retry?: boolean } = {},
+): Promise<ApiResult<T>> {
+  const { schema, redirectOn401, retry, ...requestInit } = init
+  return apiFetch<T>(`/api/customer${path}`, {
+    ...requestInit,
+    schema,
+    redirectOn401,
+    retry,
+  })
+}
 
-    if (!res.ok || !json?.success) {
-      return {
-        ok: false,
-        message: json?.message ?? `Request failed (${res.status})`,
-        errorCode: json?.error_code ?? 'unknown_error',
-        errors: json?.errors ?? null,
-        status: res.status,
-      }
-    }
-
-    return { ok: true, data: json.data as T, meta: json.meta }
-  } catch (e) {
-    if (e instanceof DOMException && e.name === 'AbortError') throw e
-    return { ok: false, message: 'Network error', errorCode: 'network_error', errors: null, status: 0 }
-  }
+/** Public storefront proxy (no token). */
+export function storeFetchClient<T>(
+  path: string,
+  init: RequestInit & { schema?: ZodType; retry?: boolean } = {},
+): Promise<ApiResult<T>> {
+  const { schema, retry, ...requestInit } = init
+  return apiFetch<T>(`/api/store${path}`, { ...requestInit, schema, retry })
 }

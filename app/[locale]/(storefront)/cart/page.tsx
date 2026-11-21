@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import { CartLineItem } from '@/components/commerce/CartLineItem'
 import { PriceSummary } from '@/components/commerce/PriceSummary'
 import { JourneyProgress } from '@/components/commerce/JourneyProgress'
@@ -15,7 +16,28 @@ const SHIPPING_ESTIMATE = 0
 
 export default function CartPage() {
   const t = useTranslations('cart')
-  const { items, subtotal } = useCart()
+  const { items, coupon, isLoading } = useCart()
+
+  if (isLoading) {
+    return (
+      <Section as="div" className="section-y">
+        <Container>
+          <h1 className="heading-2 mb-8">{t('title')}</h1>
+          <JourneyProgress current="cart" />
+          <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
+            <div className="flex flex-col gap-4">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-24 w-full rounded-xl" />
+              ))}
+            </div>
+            <div className="lg:sticky lg:top-24 lg:self-start">
+              <Skeleton className="h-64 w-full rounded-xl" />
+            </div>
+          </div>
+        </Container>
+      </Section>
+    )
+  }
 
   return (
     <Section as="div" className="section-y">
@@ -36,13 +58,16 @@ export default function CartPage() {
           <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
             <div>
               {items.map((item) => (
-                <CartLineItem key={`${item.productId}-${item.variant ?? ''}`} item={item} />
+                <CartLineItem
+                  key={`${item.productId}-${item.variant ?? ''}`}
+                  item={item}
+                  coupon={coupon}
+                />
               ))}
             </div>
 
             <div className="lg:sticky lg:top-24 lg:self-start">
               <PriceSummary
-                subtotal={subtotal}
                 shipping={SHIPPING_ESTIMATE}
                 ctaLabel={t('checkout')}
                 ctaHref="/checkout"

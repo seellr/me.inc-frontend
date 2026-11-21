@@ -38,7 +38,7 @@ export type NavMenu =
   | { kind: 'customers'; label: string; heading: string; cards: StoryCard[]; viewAllHref: string }
   | { kind: 'resources'; label: string; promos: PromoCard[]; columns: LinkColumn[] }
 
-export const navMenus: NavMenu[] = [
+export const navMenusEn: NavMenu[] = [
   { kind: 'link', label: 'Shop', href: '/products' },
   {
     kind: 'product',
@@ -102,3 +102,74 @@ export const navMenus: NavMenu[] = [
     ],
   },
 ]
+
+export const navMenusAr: NavMenu[] = [
+  { kind: 'link', label: 'المتجر', href: '/products' },
+  {
+    kind: 'product',
+    label: 'المنتجات',
+    columns: [
+      {
+        heading: 'المنتجات',
+        items: [
+          { title: 'التحليلات الحوارية', subtitle: 'اسأل الذكاء الاصطناعي بلغة طبيعية', href: '/product/conversational-analytics', icon: 'purple' },
+          { title: 'تطبيقات البيانات', subtitle: 'ابنِ تطبيقات على بيانات موثوقة', href: '/product/data-apps', icon: 'blue' },
+          { title: 'دليل المقاييس', subtitle: 'كل المؤشرات في مكان واحد موحد', href: '/product/metrics-catalog', icon: 'green' },
+          { title: 'التحليلات المضمنة', subtitle: 'رؤى ذكية ومضمنة في أي مكان', href: '/product/embedded-analytics', icon: 'pink' },
+          { title: 'لوحات تحكم تفاعلية', subtitle: 'استكشف كل رقم بتفاصيله الدقيقة', href: '/product/dashboards', icon: 'orange' },
+        ],
+      },
+      {
+        heading: 'المنصة',
+        items: [
+          { title: 'ذكاء الأعمال الوكيلي', subtitle: 'ابنِ لوحات التحكم وقم بصيانتها ككود', href: '/platform/agentic-bi', icon: 'purple' },
+          { title: 'التكاملات والربط', subtitle: 'استخدم الأدوات التي تفضلها بالفعل', href: '/platform/integrations', icon: 'blue' },
+        ],
+      },
+    ],
+    promos: [
+      { title: 'سجل التحديثات', subtitle: 'اطّلع على أحدث مميزات منتجنا', href: '/changelog' },
+      { title: 'جرّب النسخة الحية', subtitle: 'اختبر المنصة مباشرة في متصفحك', href: '/demo' },
+    ],
+  },
+  { kind: 'link', label: 'الأسعار', href: '/pricing' },
+  {
+    kind: 'customers',
+    label: 'عملاؤنا',
+    heading: 'قصص نجاح مميزة',
+    cards: [
+      { logo: 'fal', title: 'كيف تستخدم fal ذكاء الأعمال الوكيلي لإدارة بيانات 80 موظفاً بفريق من شخص واحد', href: '/customers/fal' },
+      { logo: 'Gen', title: 'كيف أطلق CCO في Gen H مقاييس الإنتاج في يومين فقط عبر ذكاء الأعمال الوكيلي', href: '/customers/gen-h' },
+      { logo: 'JustWatch', title: 'كيف بنت JustWatch ثقافة بيانات مدعومة بالذكاء الاصطناعي في 40+ سوقاً', href: '/customers/justwatch' },
+    ],
+    viewAllHref: '/customers',
+  },
+  {
+    kind: 'resources',
+    label: 'المصادر',
+    promos: [
+      { title: 'التوثيق التقني', subtitle: 'ابدأ التطوير والبناء', href: '/docs' },
+      { title: 'المدونة التقنية', subtitle: 'مقالات معمقة وأفكار هندسية', href: '/blog' },
+    ],
+    columns: [
+      {
+        items: [
+          { title: 'من نحن', subtitle: 'قصتنا ومهمتنا حتى الآن…', href: '/about', icon: 'green' },
+          { title: 'خارطة الطريق', subtitle: 'نظرة على خططنا المستقبلية', href: '/roadmap', icon: 'blue' },
+        ],
+      },
+      {
+        items: [
+          { title: 'المجتمع', subtitle: 'انضم إلى مجتمع سلاك النشط!', href: '/community', icon: 'purple' },
+          { title: 'الشراكات', subtitle: 'كن شريكاً رسمياً معنا!', href: '/partners', icon: 'orange' },
+        ],
+      },
+    ],
+  },
+]
+
+export function getNavMenus(locale?: string): NavMenu[] {
+  return locale === 'ar' ? navMenusAr : navMenusEn
+}
+
+export const navMenus: NavMenu[] = navMenusEn

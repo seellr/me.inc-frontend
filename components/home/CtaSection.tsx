@@ -34,8 +34,10 @@ export function CtaSection() {
           <AnimatedLine
             d="M6 0 V55 Q6 78 32 82 L70 88"
             viewBox="0 0 100 100"
-            className="absolute -start-2 top-full hidden h-56 w-72 lg:block"
+            className="absolute -start-2 top-full hidden h-56 w-72 lg:block rtl:scale-x-[-1] rtl:translate-y-2"
             strokeWidth={1}
+
+
           />
           <div className="relative mx-auto mt-10 h-64 w-64 lg:absolute lg:-bottom-72 lg:start-40 lg:mt-0">
             <FloatingImage src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80&fit=crop" alt={t('floatingAlt')} range={25} className="absolute inset-0" />
