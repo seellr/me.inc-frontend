@@ -3,7 +3,8 @@
 import { Link } from '@/i18n/navigation'
 import { NavigationMenu } from '@base-ui/react/navigation-menu'
 import { ChevronDown } from 'lucide-react'
-import { navMenus } from './nav-data'
+import { useLocale } from 'next-intl'
+import { getNavMenus } from './nav-data'
 import { LinkRow } from './link-row'
 import { PromoCard } from './promo-card'
 
@@ -19,10 +20,13 @@ const contentTransitionClass =
   'data-ending-style:data-[activation-direction=right]:-translate-x-4'
 
 export function DesktopMenu() {
+  const locale = useLocale()
+  const menus = getNavMenus(locale)
+
   return (
     <NavigationMenu.Root className="hidden min-w-0 lg:block" delay={80} closeDelay={100}>
       <NavigationMenu.List className="flex items-center gap-2">
-        {navMenus.map((menu) => {
+        {menus.map((menu) => {
           if (menu.kind === 'link') {
             return (
               <NavigationMenu.Item key={menu.label}>

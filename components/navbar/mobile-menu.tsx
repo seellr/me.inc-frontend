@@ -6,7 +6,7 @@ import { ChevronDown, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { getDirection } from '@/lib/i18n/direction'
-import { navMenus } from './nav-data'
+import { getNavMenus } from './nav-data'
 import { LinkRow } from './link-row'
 import { PromoCard } from './promo-card'
 
@@ -18,7 +18,9 @@ export function MobileMenu({
   onOpenChange: (open: boolean) => void
 }) {
   const t = useTranslations('nav')
-  const dir = getDirection(useLocale())
+  const locale = useLocale()
+  const dir = getDirection(locale)
+  const menus = getNavMenus(locale)
   const close = () => onOpenChange(false)
 
   return (
@@ -44,7 +46,7 @@ export function MobileMenu({
           </div>
 
           <nav className="flex flex-col gap-1">
-            {navMenus.map((menu) => {
+            {menus.map((menu) => {
               if (menu.kind === 'link') {
                 return (
                   <Link

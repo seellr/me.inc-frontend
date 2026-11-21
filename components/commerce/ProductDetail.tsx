@@ -93,8 +93,16 @@ export function ProductDetail({
   const sizeOptions = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
 
-  const handleAddToCart = () => {
-    addItem(product.id, quantity, { name: product.name, price: product.price, image: product.image, slug: product.slug })
+  const handleAddToCart = async () => {
+    const { error } = await addItem(product.id, quantity)
+    if (error === 'product_not_purchasable') {
+      sileo.error({ title: t('itemUnavailable') })
+      return
+    }
+    if (error) {
+      sileo.error({ title: error })
+      return
+    }
     setAdded(true)
     sileo.success({ title: 'Added successfully', fill: 'black', styles: { title: 'text-white!' } })
     setTimeout(() => setAdded(false), 1800)
@@ -244,7 +252,7 @@ export function ProductDetail({
               <span className="w-10 text-center tabular-nums font-medium">{quantity}</span>
               <button
                 type="button"
-                onClick={() => setQuantity((q) => q + 1)}
+                onClick={() => setQuantity((q) => Math.min(10, q + 1))}
                 className="flex size-8 items-center justify-center rounded-full text-foreground/70 hover:bg-muted"
               >
                 <Plus className="size-4" />

@@ -1,26 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { BACKEND_API_URL, BACKEND_API_KEY } from '@/lib/admin/backend-client'
+import { NextResponse } from 'next/server'
 
-async function forward(request: NextRequest, path: string[]): Promise<NextResponse> {
-  const locale = request.headers.get('x-locale') ?? 'en'
-  const search = request.nextUrl.search
-  const targetUrl = `${BACKEND_API_URL}/${path.join('/')}${search}`
-
-  const res = await fetch(targetUrl, {
-    method: request.method,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'x-api-key': BACKEND_API_KEY,
-      'Accept-Language': locale,
-      'X-Brand-Id': '1',
+/**
+ * Deprecated: this catch-all used to forward any path to the backend with a
+ * hardcoded brand id. It is now closed — use the explicit /api/store allowlist.
+ */
+function gone() {
+  return NextResponse.json(
+    {
+      success: false,
+      message: 'This endpoint has moved to /api/store',
+      error_code: 'endpoint_moved',
     },
-  })
-
-  const json = await res.json().catch(() => ({}))
-  return NextResponse.json(json, { status: res.status })
+    { status: 410 },
+  )
 }
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
-  return forward(request, (await params).path)
+export async function GET() {
+  return gone()
+}
+export async function POST() {
+  return gone()
+}
+export async function PUT() {
+  return gone()
+}
+export async function DELETE() {
+  return gone()
 }
