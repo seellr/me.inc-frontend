@@ -17,6 +17,88 @@ import {
 
 type Sort = 'featured' | 'priceAsc' | 'priceDesc'
 
+interface FiltersPanelProps {
+  categories: StoreCategory[]
+  activeCategories: string[]
+  onToggleCategory: (slug: string) => void
+  onClearCategories: () => void
+  maxPrice: number
+  priceCeiling: number
+  onMaxPriceChange: (value: number) => void
+  categoryLabel: string
+  allCategoriesLabel: string
+  priceRangeLabel: string
+}
+
+function FiltersPanel({
+  categories,
+  activeCategories,
+  onToggleCategory,
+  onClearCategories,
+  maxPrice,
+  priceCeiling,
+  onMaxPriceChange,
+  categoryLabel,
+  allCategoriesLabel,
+  priceRangeLabel,
+}: FiltersPanelProps) {
+  return (
+    <div className="flex flex-col gap-0">
+      {/* Category pills */}
+      <div className="pb-4 border-b border-border">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          {categoryLabel}
+        </p>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={onClearCategories}
+            className={
+              'rounded-full px-3 py-1 text-xs font-medium transition-colors ' +
+              (activeCategories.length === 0
+                ? 'bg-foreground text-background'
+                : 'bg-muted text-muted-foreground hover:text-foreground')
+            }
+          >
+            {allCategoriesLabel}
+          </button>
+          {categories.map((c) => (
+            <button
+              key={c.slug}
+              type="button"
+              onClick={() => onToggleCategory(c.slug)}
+              className={
+                'rounded-full px-3 py-1 text-xs font-medium transition-colors ' +
+                (activeCategories.includes(c.slug)
+                  ? 'bg-foreground text-background'
+                  : 'bg-muted text-muted-foreground hover:text-foreground')
+              }
+            >
+              {c.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Price range */}
+      <div className="py-4">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          {priceRangeLabel}
+        </p>
+        <input
+          type="range"
+          min={0}
+          max={priceCeiling}
+          value={maxPrice}
+          onChange={(e) => onMaxPriceChange(Number(e.target.value))}
+          className="w-full accent-primary"
+        />
+        <p className="caption mt-1">0 – {maxPrice}</p>
+      </div>
+    </div>
+  )
+}
+
 export function ProductsListing({
   products,
   categories,
@@ -33,7 +115,7 @@ export function ProductsListing({
 
   const [activeCategories, setActiveCategories] = useState<string[]>([])
   const [sort, setSort] = useState<Sort>('featured')
-  const priceCeiling = Math.max(...products.map((p) => p.price), 100)
+  const priceCeiling = Math.max(...products.map((p) => Number(p.price)), 100)
   const [maxPrice, setMaxPrice] = useState<number>(priceCeiling)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
@@ -43,67 +125,15 @@ export function ProductsListing({
     )
 
   const filtered = useMemo(() => {
-    let list = products.filter((p) => p.price <= maxPrice)
+    let list = products.filter((p) => Number(p.price) <= maxPrice)
     if (activeCategories.length > 0)
       list = list.filter((p) => activeCategories.includes(p.categorySlug))
     switch (sort) {
-      case 'priceAsc': return [...list].sort((a, b) => a.price - b.price)
-      case 'priceDesc': return [...list].sort((a, b) => b.price - a.price)
+      case 'priceAsc': return [...list].sort((a, b) => Number(a.price) - Number(b.price))
+      case 'priceDesc': return [...list].sort((a, b) => Number(b.price) - Number(a.price))
       default: return [...list].sort((a, b) => Number(b.featured) - Number(a.featured))
     }
   }, [products, activeCategories, maxPrice, sort])
-
-  const FiltersPanel = () => (
-    <div className="flex flex-col gap-0">
-      {/* Category pills */}
-      <div className="pb-4 border-b border-border">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('filters.category')}</p>
-        <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            onClick={() => setActiveCategories([])}
-            className={
-              'rounded-full px-3 py-1 text-xs font-medium transition-colors ' +
-              (activeCategories.length === 0
-                ? 'bg-foreground text-background'
-                : 'bg-muted text-muted-foreground hover:text-foreground')
-            }
-          >
-            {t('filters.allCategories')}
-          </button>
-          {categories.map((c) => (
-            <button
-              key={c.slug}
-              type="button"
-              onClick={() => toggleCategory(c.slug)}
-              className={
-                'rounded-full px-3 py-1 text-xs font-medium transition-colors ' +
-                (activeCategories.includes(c.slug)
-                  ? 'bg-foreground text-background'
-                  : 'bg-muted text-muted-foreground hover:text-foreground')
-              }
-            >
-              {c.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Price range */}
-      <div className="py-4">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('filters.priceRange')}</p>
-        <input
-          type="range"
-          min={0}
-          max={priceCeiling}
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(Number(e.target.value))}
-          className="w-full accent-primary"
-        />
-        <p className="caption mt-1">0 – {maxPrice}</p>
-      </div>
-    </div>
-  )
 
   return (
     <div>
@@ -150,7 +180,19 @@ export function ProductsListing({
               <X className="size-4 text-muted-foreground" />
             </button>
           </div>
-          <FiltersPanel />
+
+          <FiltersPanel
+            categories={categories}
+            activeCategories={activeCategories}
+            onToggleCategory={toggleCategory}
+            onClearCategories={() => setActiveCategories([])}
+            maxPrice={maxPrice}
+            priceCeiling={priceCeiling}
+            onMaxPriceChange={setMaxPrice}
+            categoryLabel={t('filters.category')}
+            allCategoriesLabel={t('filters.allCategories')}
+            priceRangeLabel={t('filters.priceRange')}
+          />
         </div>
       )}
 
@@ -158,7 +200,18 @@ export function ProductsListing({
         {/* Desktop sidebar */}
         <aside className="hidden lg:block lg:sticky lg:top-24 lg:self-start">
           <p className="mb-4 text-sm font-semibold text-foreground">{t('filters.title')}</p>
-          <FiltersPanel />
+          <FiltersPanel
+            categories={categories}
+            activeCategories={activeCategories}
+            onToggleCategory={toggleCategory}
+            onClearCategories={() => setActiveCategories([])}
+            maxPrice={maxPrice}
+            priceCeiling={priceCeiling}
+            onMaxPriceChange={setMaxPrice}
+            categoryLabel={t('filters.category')}
+            allCategoriesLabel={t('filters.allCategories')}
+            priceRangeLabel={t('filters.priceRange')}
+          />
         </aside>
 
         {/* Grid */}
