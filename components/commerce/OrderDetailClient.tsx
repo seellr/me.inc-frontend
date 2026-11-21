@@ -211,11 +211,12 @@ export function OrderDetailClient({
   const showDelivery = isPaid
 
   async function handleInvoice() {
-    if (invoiceLoading) return
+    if (invoiceLoading || !order) return
+    const currentOrder = order
     setInvoiceLoading(true)
     setInvoiceError(null)
     try {
-      const result = await getOrderInvoice(order.ulid)
+      const result = await getOrderInvoice(currentOrder.ulid)
       if (result.ok) openInvoice(result)
       else setInvoiceError(t('invoiceError'))
     } finally {

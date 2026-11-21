@@ -1,4 +1,5 @@
 import {
+  enumId,
   enumLabel,
   type CustomerOrderResponse,
   type DeliveryResponse,
@@ -19,7 +20,7 @@ export function mapOrder(raw: CustomerOrderResponse): CustomerOrderView {
   return {
     ulid: raw.ulid,
     invoiceNumber: raw.invoice_number ?? null,
-    statusId: raw.status && typeof raw.status === 'number' ? raw.status : raw.status?.id ?? null,
+    statusId: enumId(raw.status),
     statusLabel: enumLabel(raw.status, ''),
     subtotal: raw.subtotal ?? null,
     discount: raw.discount ?? raw.discount_amount ?? null,

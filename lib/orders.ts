@@ -47,6 +47,8 @@ export function placeOrder(input: {
     timeline: STAGE_SEQUENCE.map((stage, i) => ({
       stage,
       timestamp: i <= stageIndex ? new Date(now - (stageIndex - i) * 86_400_000).toISOString() : null,
+      date: i <= stageIndex ? new Date(now - (stageIndex - i) * 86_400_000).toLocaleDateString() : '',
+      completed: i <= stageIndex,
     })),
     createdAt: new Date(now).toISOString(),
   }
@@ -60,7 +62,7 @@ export function findOrder(number: string, email: string): Order | null {
   const emailNormalized = email.trim().toLowerCase()
   return (
     readAll().find(
-      (o) => o.number.toUpperCase() === normalized && o.email.toLowerCase() === emailNormalized
+      (o) => o.number.toUpperCase() === normalized && o.email?.toLowerCase() === emailNormalized
     ) ?? null
   )
 }
