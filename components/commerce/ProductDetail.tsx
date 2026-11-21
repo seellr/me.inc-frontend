@@ -110,9 +110,9 @@ export function ProductDetail({
 
   const handleShare = async () => {
     if (navigator.share) {
-      await navigator.share({ title: product.name, url: window.location.href }).catch(() => {})
+      await navigator.share({ title: product.name, url: window.location.href }).catch(() => { })
     } else {
-      await navigator.clipboard.writeText(window.location.href).catch(() => {})
+      await navigator.clipboard.writeText(window.location.href).catch(() => { })
       sileo.success({ title: 'Link copied' })
     }
   }
@@ -190,7 +190,7 @@ export function ProductDetail({
           <div className="flex items-baseline gap-3">
             <span className="price text-2xl font-bold">{formatCurrency(product.price, locale)}</span>
             <span className="text-sm text-muted-foreground line-through">
-              {formatCurrency(product.price * 1.2, locale)}
+              {formatCurrency(Number(product.price) * 1.2, locale)}
             </span>
             <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">20% OFF</Badge>
           </div>

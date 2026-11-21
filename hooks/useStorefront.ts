@@ -275,7 +275,6 @@ export function useProductSearch(query: string, perPage = 20) {
       const params = new URLSearchParams({ q: trimmed, per_page: String(Math.min(perPage, 50)) })
       void storeFetchClient<unknown>(`/search/products?${params.toString()}`, {
         schema: SearchProductsResponseSchema,
-        redirectOn401: false,
       }).then((result) => {
         if (cancelled) return
         if (result.ok) {

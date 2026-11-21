@@ -8,6 +8,27 @@ export interface StoreCategory {
   image: string
   color: 'pink' | 'teal' | 'green'
 }
+export type OrderStage = "placed" | "processing" | "shipped" | "delivered" | "out_for_delivery"
+
+export type Timeline = {
+  stage: OrderStage
+  date?: string
+  timestamp?: string | null
+  completed?: boolean
+}
+export type Order = {
+  id?: string
+  number: string
+  email?: string
+  items?: CartItem[]
+  subtotal?: number | string
+  shipping?: number | string
+  total: MoneyValue
+  address?: Address
+  timeline: Timeline[]
+  currentStage: OrderStage
+  createdAt?: string
+}
 
 export interface StoreProduct {
   id: string
@@ -20,6 +41,13 @@ export interface StoreProduct {
   image: string | null
   description: string
   featured?: boolean
+  variants?: ({
+    name: string
+    price: MoneyValue
+    sku: string
+  } | string)[]
+  rating?: number
+  reviews?: number
 }
 
 export interface CartItem {
